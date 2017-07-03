@@ -3,12 +3,7 @@ package com.example.jordan.basicslibrary.Utilities.Utils;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.support.annotation.Nullable;
-import android.util.DisplayMetrics;
-import android.view.Display;
-import android.view.Surface;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 /**
@@ -107,5 +102,12 @@ public class MHelper {
     }
 
 
+    public static boolean isViewVisible(View view){
+        if(view.getVisibility() == View.VISIBLE){
+            return  true ;
+        }else {
+            return false;
+        }
+    }
 
 }

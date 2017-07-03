@@ -15,11 +15,10 @@ import android.view.animation.Transformation;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Rotate;
 import com.transitionseverywhere.Slide;
-import com.transitionseverywhere.Transition;
 import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
-import com.transitionseverywhere.Visibility;
 import com.transitionseverywhere.extra.Scale;
+
 
 /**
  * Created by Jordan on 5/30/2017.
@@ -123,32 +122,36 @@ public class MAnimator {
         viewToAnimate.setRotation(isRotated ? 135 : 0);
     }
 
-    public static void fade(@Nullable int duration,  View... viewsToFade){
+    public static void toggleFade( View... viewsToFade){
+        for (View v : viewsToFade) {
+            beginTransition(v , 0 );
+        }
+    }
 
-        TransitionSet set = new TransitionSet().addTransition(new Scale(0.7f)).addTransition(new Fade());
-
-        // if no duration is set will fade in or out very quickly
-        if(duration != 0){ set.setDuration(duration); }
+    public static void toggleFade(@Nullable int duration, View... viewsToFade){
 
         for (View v : viewsToFade) {
-            beginTransition(v, set);
+            beginTransition(v , duration );
         }
+
     }
+
 
     // only used in this class but is static because static methods can only use static methods
-    private static void beginTransition(View v , TransitionSet set){
-        // creates a bubble fade effect
+    private static void beginTransition(View v , int duration ){
+        // creates a bubble toggleFade effect
 
-        if(v.getVisibility() == View.VISIBLE) {
-            set.setInterpolator(new LinearOutSlowInInterpolator());
+        boolean visible = MHelper.isViewVisible(v);
 
-            // must be set view.invisible or else fade out will not work with view.gone
-            v.setVisibility(View.INVISIBLE);
-        }else {
-            set.setInterpolator(   new FastOutLinearInInterpolator()  );
-            v.setVisibility(View.VISIBLE);
+        TransitionSet set = new TransitionSet()
+                .addTransition(new Scale(0.7f))
+                .addTransition(new Fade())
+                .setInterpolator(visible ?  new FastOutLinearInInterpolator() : new LinearOutSlowInInterpolator());
+
+        if(duration != 0){
+            set.setDuration(duration);
         }
-        TransitionManager.beginDelayedTransition((ViewGroup) v.getParent(), set);
+        TransitionManager.beginDelayedTransition((ViewGroup) v.getParent()  , set);
+        v.setVisibility(visible ? View.INVISIBLE : View.VISIBLE );
     }
-
 }
