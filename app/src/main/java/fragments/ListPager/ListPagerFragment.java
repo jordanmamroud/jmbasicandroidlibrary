@@ -61,6 +61,13 @@ public class ListPagerFragment extends Fragment {
         return v;
     }
 
+
+    public void update(){
+        if(adapter !=   null    ){
+            adapter.notifyDataSetChanged();
+        }
+    }
+
     public void setupCallbacks(){
         mViewPager.addOnPageChangeListener(new MOnPageChange((int p)->{
                 currentPosition = p;
@@ -88,6 +95,13 @@ public class ListPagerFragment extends Fragment {
         this.currentPosition = currentPosition;
     }
 
+    public ViewPager getViewPager(){
+        return mViewPager;
+    }
+
+    public ListPagerAdapter getViewPagerAdapter(){
+        return adapter;
+    }
 
 
     @Override
