@@ -9,11 +9,12 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.example.jordan.mlibrary.R;
+import com.example.jordan.basicslibrary.R;
+
 
 import java.util.ArrayList;
 
-import static com.example.jordan.mlibrary.R.id.imageView;
+
 
 /**
  * Created by Jordan on 6/20/2017.
@@ -35,7 +36,7 @@ public class LockableGridviewAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.locked_images_item, parent , false);
+         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_locked_image, parent , false);
         return new GridViewHolder(v);
     }
 

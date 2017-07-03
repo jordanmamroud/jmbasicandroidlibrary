@@ -7,7 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.example.jordan.mlibrary.R;
+
+import com.example.jordan.basicslibrary.R;
 
 import java.util.ArrayList;
 
@@ -43,7 +44,7 @@ public class MGridViewAdapter extends BaseAdapter {
         public View getView(int position, View convertView, ViewGroup parent) {
             View grid;
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            grid = inflater.inflate(R.layout.grid_item, parent , false);
+            grid = inflater.inflate(R.layout.item_grid_image, parent , false);
 
             ImageView imageView = (ImageView)grid.findViewById(R.id.thumbnail);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);

@@ -11,8 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import com.example.jordan.mlibrary.EventListeners.MOnItemSelected;
-import com.example.jordan.mlibrary.R;
+
+import com.example.jordan.basicslibrary.R;
+import com.example.jordan.basicslibrary.Utilities.EventListeners.MOnItemSelected;
 
 import java.util.ArrayList;
 

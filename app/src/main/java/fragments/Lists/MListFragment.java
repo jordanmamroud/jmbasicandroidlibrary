@@ -8,10 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.jordan.mlibrary.EventListeners.MOnItemSelected;
-import com.example.jordan.mlibrary.IAdapterDelegates;
-import com.example.jordan.mlibrary.Lists.MListAdapter;
-import com.example.jordan.mlibrary.R;
+
+import com.example.jordan.basicslibrary.R;
+import com.example.jordan.basicslibrary.Utilities.EventListeners.MOnItemSelected;
 
 import java.util.ArrayList;
 
