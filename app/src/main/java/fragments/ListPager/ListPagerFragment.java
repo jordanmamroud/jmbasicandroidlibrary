@@ -6,7 +6,12 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
+import com.example.jordan.basicslibrary.R;
+import com.example.jordan.basicslibrary.Utilities.EventListeners.MOnPageChange;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,42 +20,88 @@ import java.util.List;
 
 public class ListPagerFragment extends Fragment {
 
-    private List itemsList;
-    private int currentPosition;
-    private Fragment fragment;
-    private int layoutResource ;
-    private int pagerViewId ;
-    private ListPagerAdapter adapter ;
+    private ArrayList itemsList;
+    private int currentPosition = 0;
+
+
+    private ViewPager mViewPager ;
+    private ListPagerAdapter adapter;
+    private IListPager iActivity ;
+    private boolean isInitialized = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(layoutResource, container, false);
-        ViewPager mViewPager = (ViewPager) v.findViewById(pagerViewId);
+        View v = inflater.inflate(R.layout.fragment_pager_view, container, false);
+        iActivity = (IListPager) getActivity();
+        itemsList = (ArrayList) iActivity.getList();
+        adapter = new ListPagerAdapter(getChildFragmentManager(), itemsList,  iActivity.getPagerFragmentType());
+        mViewPager = (ViewPager) v.findViewById(R.id.pager);
         mViewPager.setAdapter(adapter);
-        mViewPager.setCurrentItem(currentPosition);
+        setupCallbacks();
+
+        if(savedInstanceState != null) {
+            currentPosition = savedInstanceState.getInt("savedPosition");
+            isInitialized = false ;
+        }
+
+        iActivity.setCurrentPositionTxt(currentPosition);
+        // this is used so that if viewpager needs to be opened at specific position it will be . otherwise will just open to position 0 ;
+        mViewPager.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+
+                // if we do not check initialized then this will run everytime page change listener runs
+                if (!isInitialized) {
+                    mViewPager.setCurrentItem(currentPosition);
+                    isInitialized = true;
+                }
+            }
+        });
 
         return v;
     }
 
-    public void setAdapter(ListPagerAdapter adapter){
-        this.adapter = adapter ;
+    public void setupCallbacks(){
+        mViewPager.addOnPageChangeListener(new MOnPageChange((int p)->{
+                currentPosition = p;
+                iActivity.onPageChange(p);
+        }));
     }
 
-    public void setItemsList(List itemsList) {
-        this.itemsList = itemsList;
+    public int getCurrentPosition(){
+        if(mViewPager != null) {
+            return mViewPager.getCurrentItem();
+        }else return 0 ;
+    }
+
+    public void moveNext() {
+        //it doesn't matter if you're already in the last item
+        mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
+    }
+
+    public void movePrevious() {
+        //it doesn't matter if you're already in the first item
+        mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
     }
 
     public void setCurrentPosition(int currentPosition) {
         this.currentPosition = currentPosition;
     }
 
-    public void setItemFragment(Fragment fragment) {
-        this.fragment = fragment;
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("savedPosition", mViewPager.getCurrentItem());
     }
 
-    public void setContentView(int layoutResource, int pagerViewId){
-        this.layoutResource = layoutResource ;
-        this.pagerViewId = pagerViewId ;
-    }
+   public interface IListPager{
+       List getList();
+       void onPageChange(int p);
+       IPagerItemFragment getPagerFragmentType();
+       void setCurrentPositionTxt(int pos);
+    };
+
 
 }
