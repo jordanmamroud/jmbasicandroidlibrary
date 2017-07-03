@@ -6,6 +6,6 @@ package com.example.jordan.basicslibrary;
 
 public class Test {
     public void tert(){
-        System.out.println("tert");
+        System.out.println("new");
     }
 }
