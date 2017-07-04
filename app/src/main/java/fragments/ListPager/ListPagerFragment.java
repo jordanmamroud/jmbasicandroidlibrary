@@ -40,9 +40,10 @@ public class ListPagerFragment extends Fragment {
 
         iActivity = (IListPager) getActivity();
         itemsList = (ArrayList) iActivity.getList();
-        mViewPager.setOffscreenPageLimit(offScreenLimit);
+
         adapter = new ListPagerAdapter(getChildFragmentManager(), itemsList,  iActivity.getPagerFragmentType());
         mViewPager = (ViewPager) v.findViewById(R.id.pager);
+        mViewPager.setOffscreenPageLimit(offScreenLimit);
         mViewPager.setAdapter(adapter);
 
         setupCallbacks();
@@ -107,6 +108,9 @@ public class ListPagerFragment extends Fragment {
         return adapter;
     }
 
+    public void setOffScreenLimit(int limit){
+        this.offScreenLimit  = limit;
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -120,7 +124,7 @@ public class ListPagerFragment extends Fragment {
        void onPageChange(int p);
        IPagerItemFragment getPagerFragmentType();
        void setCurrentPositionTxt(int pos);
-       void setOffscreenPageLimit();
+
     };
 
 
