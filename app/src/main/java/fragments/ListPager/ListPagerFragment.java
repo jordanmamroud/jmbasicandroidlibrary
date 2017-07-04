@@ -22,7 +22,7 @@ public class ListPagerFragment extends Fragment {
 
     private ArrayList itemsList;
     private int currentPosition = 0;
-
+    private int offScreenLimit = 1;
 
     private ViewPager mViewPager ;
     private ListPagerAdapter adapter;
@@ -32,17 +32,21 @@ public class ListPagerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_pager_view, container, false);
+        if(savedInstanceState != null) {
+            currentPosition = savedInstanceState.getInt("savedPosition");
+            offScreenLimit = savedInstanceState.getInt("offScreenLimit");
+            isInitialized = false ;
+        }
+
         iActivity = (IListPager) getActivity();
         itemsList = (ArrayList) iActivity.getList();
+        mViewPager.setOffscreenPageLimit(offScreenLimit);
         adapter = new ListPagerAdapter(getChildFragmentManager(), itemsList,  iActivity.getPagerFragmentType());
         mViewPager = (ViewPager) v.findViewById(R.id.pager);
         mViewPager.setAdapter(adapter);
+
         setupCallbacks();
 
-        if(savedInstanceState != null) {
-            currentPosition = savedInstanceState.getInt("savedPosition");
-            isInitialized = false ;
-        }
 
         iActivity.setCurrentPositionTxt(currentPosition);
         // this is used so that if viewpager needs to be opened at specific position it will be . otherwise will just open to position 0 ;
@@ -108,6 +112,7 @@ public class ListPagerFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("savedPosition", mViewPager.getCurrentItem());
+        outState.putInt("offScreenLimit", offScreenLimit);
     }
 
    public interface IListPager{
@@ -115,6 +120,7 @@ public class ListPagerFragment extends Fragment {
        void onPageChange(int p);
        IPagerItemFragment getPagerFragmentType();
        void setCurrentPositionTxt(int pos);
+       void setOffscreenPageLimit();
     };
 
 
