@@ -15,7 +15,7 @@ public class ListPagerAdapter extends FragmentStatePagerAdapter{
 
     private List data;
     private IPagerItemFragment fragment;
-
+    private Fragment currentFrag;
 
     public ListPagerAdapter(FragmentManager fm, List data,  IPagerItemFragment fragment){
         super(fm);
@@ -25,7 +25,9 @@ public class ListPagerAdapter extends FragmentStatePagerAdapter{
 
     @Override
     public Fragment getItem(int position) {
-        return  fragment.newInstance(data.get(position) , position);
+        currentFrag = null;
+        currentFrag =fragment.newInstance(data.get(position) , position);
+        return   currentFrag;
     }
 
     @Override
@@ -36,5 +38,9 @@ public class ListPagerAdapter extends FragmentStatePagerAdapter{
     @Override
     public Parcelable saveState() {
         return null ;
+    }
+
+    public Fragment getCurrentFrag(){
+        return currentFrag;
     }
 }
