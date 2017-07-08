@@ -141,7 +141,7 @@ public class MAnimator {
     private static void beginTransition(View v , int duration ){
         // creates a bubble toggleFade effect
         System.out.println(duration);
-        boolean visible = MHelper.isViewVisible(v);
+        boolean visible = ViewHelper.isViewVisible(v);
 
         TransitionSet set = new TransitionSet();
         if(duration != 0){
