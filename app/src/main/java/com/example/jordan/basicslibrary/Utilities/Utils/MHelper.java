@@ -2,9 +2,10 @@ package com.example.jordan.basicslibrary.Utilities.Utils;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.support.annotation.Nullable;
-import android.view.View;
-import android.widget.RelativeLayout;
+import android.graphics.Point;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.WindowManager;
 
 /**
  * Created by Jordan on 6/5/2017.
@@ -23,6 +24,11 @@ public class MHelper {
         return pixels;
     }
 
+    public static int getDpsFromPixels(Context context ,int dp) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+    }
+
     public static boolean isDefaultLandscape(final Context context) {
 
         int orientation = context.getResources().getConfiguration().orientation;
@@ -34,80 +40,27 @@ public class MHelper {
         }
     }
 
+    public static String[] splitString(String stringToSplit){
+        return stringToSplit.split("(?!^)");
+    }
 
-    // must put zero if no rule needs to be removed
-    public static void addRuleToViews(int rule , @Nullable int ruleToRemoveOrZero, View... views){
-        // adds a rule to multiple children of relative layout
-        for( View v : views) {
-            RelativeLayout.LayoutParams updatedParams = (RelativeLayout.LayoutParams) v.getLayoutParams();
-            updatedParams.addRule(rule);
-            if(ruleToRemoveOrZero!= 0) {
-                // this removes the rule , there is a actual remove rule method is for api 17 and above
-                updatedParams.addRule(ruleToRemoveOrZero, 0);
-            }
-            v.setLayoutParams(updatedParams);
+    public static boolean isNumEven(int n){
+        if ( ( n % 2 ) == 0 ) {
+            return true ;
+        } else {
+            return  false;
         }
     }
 
-    public static void addMultipleRulesToView(View v, int ruleToRemoveOrZero,int... rules){
-        RelativeLayout.LayoutParams updatedParams = (RelativeLayout.LayoutParams) v.getLayoutParams();
-        if(ruleToRemoveOrZero!= 0) {
-            // this removes the rule , actual remove rule method is for api 17 and above
-            updatedParams.addRule(ruleToRemoveOrZero, 0);
-        }
-        for (int rule : rules){
-            updatedParams.addRule(rule);
-        }
-        v.setLayoutParams(updatedParams);
+    public static int getDeviceWidth(Context context){
+        final Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        Point deviceDisplay = new Point();
+        display.getSize(deviceDisplay);
+        int deviceWidth = deviceDisplay.x;
+        return deviceWidth ;
     }
 
 
 
-    public static void removeRulesFromView(View v , int... rules){
-        RelativeLayout.LayoutParams updatedParams = (RelativeLayout.LayoutParams) v.getLayoutParams();
-        for (int rule : rules){
-            updatedParams.addRule(rule , 0);
-        }
-        v.setLayoutParams(updatedParams);
-    }
-
-    public static void updateParams( boolean remove,    RelativeLayout.LayoutParams params, int... rules){
-        for (int rule : rules){
-            if(remove) {
-                params.addRule(rule, 0);
-            }else {
-                params.addRule(rule);
-            }
-        }
-    }
-
-    public static void addAlignmentRule(View v , int alignmentRule , int viewIdToAlignTo){
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) v.getLayoutParams();
-        params.addRule(alignmentRule, viewIdToAlignTo);
-        v.setLayoutParams(params);
-    }
-
-    public static void removeLayoutRules(int ruleToRemove, View v){
-        RelativeLayout.LayoutParams updatedParams = (RelativeLayout.LayoutParams) v.getLayoutParams();
-        // this removes the rule , actual remove rule method is for api 17 and above
-        updatedParams.addRule(ruleToRemove, 0);
-    }
-
-    public static void setViewsMargin ( int amount, View... views){
-        for (View v : views){
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)v.getLayoutParams();
-            params.setMargins(amount,amount,amount,amount);
-            v.setLayoutParams(params);
-        }
-    }
-
-
-    public static boolean isViewVisible(View view){
-        if(view.getVisibility() == View.VISIBLE){
-            return  true ;
-        }else {
-            return false;
-        }
-    }
 
 }

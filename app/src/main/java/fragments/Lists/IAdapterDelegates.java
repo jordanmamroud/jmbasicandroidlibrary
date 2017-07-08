@@ -12,5 +12,5 @@ public interface IAdapterDelegates {
 
     void onBindViewHolder(ArrayList itemsList, RecyclerView.ViewHolder holder, int position);
     RecyclerView.ViewHolder createViewHolder(ViewGroup parent, int viewType);
-
+    void update(Object o);
 }

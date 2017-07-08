@@ -140,17 +140,18 @@ public class MAnimator {
     // only used in this class but is static because static methods can only use static methods
     private static void beginTransition(View v , int duration ){
         // creates a bubble toggleFade effect
-
+        System.out.println(duration);
         boolean visible = MHelper.isViewVisible(v);
 
-        TransitionSet set = new TransitionSet()
-                .addTransition(new Scale(0.7f))
-                .addTransition(new Fade())
-                .setInterpolator(visible ?  new FastOutLinearInInterpolator() : new LinearOutSlowInInterpolator());
-
+        TransitionSet set = new TransitionSet();
         if(duration != 0){
             set.setDuration(duration);
         }
+        set.addTransition(new Scale(0.7f));
+        set.addTransition(new Fade());
+        set.setInterpolator(visible ?  new FastOutLinearInInterpolator() : new LinearOutSlowInInterpolator());
+
+
         TransitionManager.beginDelayedTransition((ViewGroup) v.getParent()  , set);
         v.setVisibility(visible ? View.INVISIBLE : View.VISIBLE );
     }

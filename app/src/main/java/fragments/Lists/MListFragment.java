@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import com.example.jordan.basicslibrary.R;
 import com.example.jordan.basicslibrary.Utilities.EventListeners.MOnItemSelected;
 
@@ -26,7 +25,7 @@ public class MListFragment extends Fragment {
     private ArrayList dataList ;
     private int layoutResource = 0;
     private int recyclerViewId ;
-    private RecyclerView.OnScrollListener onScrollListener ;
+    private IListFragment iActivity ;
 
     public void setAdapterDelegate(IAdapterDelegates delegate){
         this.delegate = delegate ;
@@ -34,8 +33,10 @@ public class MListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        iActivity = (IListFragment) getActivity() ;
         if(layoutResource == 0){
             layoutResource= R.layout.fragment_list;
+
         }
         View view = inflater.inflate(layoutResource, container, false);
         instantiateView(view);
@@ -45,8 +46,7 @@ public class MListFragment extends Fragment {
     }
 
     public void instantiateView(View view){
-
-            list = (RecyclerView) view.findViewById(recyclerViewId);
+        list = (RecyclerView) view.findViewById(R.id.mListview);
         if (list!= null){
             MListAdapter adapter = new MListAdapter(getContext(), delegate, dataList);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -63,17 +63,17 @@ public class MListFragment extends Fragment {
     }
 
     public void setupCallbacks(){
-        list.addOnItemTouchListener(new MOnItemSelected(getContext(), new MOnItemSelected.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                if(onItemClickListener != null) {
-                    onItemClickListener.onItemClick(view, position);
-                }
-            }
-        }));
+        // gets event from activity
+        list.addOnItemTouchListener(new MOnItemSelected(getContext(),
+                (View view, int position)-> iActivity.onListItemSelected(position, dataList.get(position))));
     }
 
     public void  setOnItemClick(MOnItemSelected.OnItemClickListener onItemClick){
         this.onItemClickListener = onItemClick;
     }
+
+    public interface IListFragment {
+        public void onListItemSelected(int position, Object object);
+    }
+
 }

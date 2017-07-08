@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:id="@+id/imageItemLO"
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
-
     >
 
     <ImageView
@@ -14,24 +15,5 @@
         android:padding="5dp"
         xmlns:android="http://schemas.android.com/apk/res/android"
         />
-
-    <View
-        android:visibility="gone"
-        android:id="@+id/blur"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="#999EA0"
-        android:alpha="0.9"
-
-        />
-
-    <ImageView
-        android:visibility="gone"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:src="@drawable/lock"
-        android:id="@+id/lock"
-      />
 
 </FrameLayout>

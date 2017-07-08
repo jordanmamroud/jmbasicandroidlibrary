@@ -15,5 +15,4 @@ public interface IPagerItemFragment {
     View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
     Fragment newInstance(Object object, int position);
     void setItem(Object object, int position);
-    void update(Object object);
 }
