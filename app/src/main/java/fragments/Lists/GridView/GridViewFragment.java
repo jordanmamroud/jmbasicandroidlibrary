@@ -45,7 +45,9 @@ public class GridViewFragment extends Fragment {
     }
 
     public void update(Object o ){
-        gridViewAdapter.updateDelegate(     o    );
+        if(gridViewAdapter != null) {
+            gridViewAdapter.updateDelegate(o);
+        }
     }
 
     public void setupCallbacks() {

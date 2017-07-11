@@ -50,7 +50,7 @@ public class GridViewDelegate implements IAdapterDelegates {
     }
 
     @Override
-    public void onBindViewHolder(ArrayList itemsList, RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(ArrayList notneeded, RecyclerView.ViewHolder holder, int position) {
         GridViewHolder mHolder = (GridViewHolder) holder ;
 
         mHolder.thumbnail.setScaleType(ImageView.ScaleType.FIT_XY);
