@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import fragments.IAdapterDelegates;
+
 /**
  * Created by Jordan on 5/4/2017.
  */

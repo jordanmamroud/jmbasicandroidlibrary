@@ -1,4 +1,4 @@
-package com.example.jordan.basicslibrary.Utilities.Utils;
+package Animations.ViewAnimations;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -12,6 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Transformation;
 
+import com.example.jordan.basicslibrary.Utilities.Utils.ViewHelper;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Rotate;
 import com.transitionseverywhere.Slide;

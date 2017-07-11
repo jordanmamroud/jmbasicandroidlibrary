@@ -27,11 +27,7 @@ public class ListPagerAdapter extends FragmentStatePagerAdapter{
 
     @Override
     public Fragment getItem(int position) {
-
-
         Fragment currentFrag =  fragment.newInstance(data.get(position) , position);
-
-
         return   currentFrag;
     }
 
@@ -58,4 +54,5 @@ public class ListPagerAdapter extends FragmentStatePagerAdapter{
 
         return super.getItemPosition(object);
     }
+
 }

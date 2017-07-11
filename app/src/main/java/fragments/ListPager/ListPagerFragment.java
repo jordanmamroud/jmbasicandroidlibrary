@@ -61,6 +61,11 @@ public class ListPagerFragment extends Fragment {
         mViewPager = (ViewPager) v.findViewById(R.id.pager);
         mViewPager.setOffscreenPageLimit(offScreenLimit);
         mViewPager.setAdapter(adapter);
+        setPageTransformer();
+    }
+
+    public void setPageTransformer(){
+        mViewPager.setPageTransformer( true,  iActivity.getPageTransformer()    );
     }
 
     public void setupLayout(){
@@ -123,6 +128,7 @@ public class ListPagerFragment extends Fragment {
        void onPageChange(int p);
        IPagerItemFragment getPagerFragmentType();
        void setCurrentPositionTxt(int pos);
+       ViewPager.PageTransformer getPageTransformer();
    };
 
 }

@@ -1,4 +1,4 @@
-package fragments.GridView;
+package fragments.Lists.GridView;
 
 
 import android.os.Bundle;
@@ -15,23 +15,22 @@ import com.example.jordan.basicslibrary.Utilities.EventListeners.MOnItemSelected
 
 import java.util.ArrayList;
 
-import fragments.Lists.IAdapterDelegates;
+import fragments.IAdapterDelegates;
 
 public class GridViewFragment extends Fragment {
 
     private String OUTSTATE_KEY_NUMIMAGES = "numOfAvailableImages" ;
     private RecyclerView imagesGrid ;
-    private ArrayList<Integer> images = new ArrayList<>();
+    private ArrayList items = new ArrayList<>();
     private GridViewAdapter gridViewAdapter ;
     private IGridViewFragment iActivity ;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(  R.layout.fragment_grid_view   , container , false   );
 
         iActivity = (IGridViewFragment) getActivity() ;
-        images = iActivity.getGridImages();
+        items = iActivity.getGridItems();
         instantiateView(v);
         setupCallbacks();
         return v    ;
@@ -39,14 +38,14 @@ public class GridViewFragment extends Fragment {
 
     public void instantiateView(View v){
         RecyclerView.LayoutManager manager = new GridLayoutManager(getContext(), 2);
-        gridViewAdapter = new GridViewAdapter(getContext(), images  ,   iActivity.getViewDelegate()    );
+        gridViewAdapter = new GridViewAdapter(getContext(), items  ,   iActivity.getViewDelegate()    );
         imagesGrid = (RecyclerView) v.findViewById(R.id.imagesGrid);
         imagesGrid.setLayoutManager(manager);
         imagesGrid.setAdapter(gridViewAdapter);
     }
 
-    public void update(){
-        gridViewAdapter.updateDelegate(     6    );
+    public void update(Object o ){
+        gridViewAdapter.updateDelegate(     o    );
     }
 
     public void setupCallbacks() {
@@ -62,7 +61,7 @@ public class GridViewFragment extends Fragment {
 
     public interface IGridViewFragment{
         void onGridImageClick(int position);
-        ArrayList getGridImages();
+        ArrayList getGridItems();
         IAdapterDelegates getViewDelegate();
     }
 

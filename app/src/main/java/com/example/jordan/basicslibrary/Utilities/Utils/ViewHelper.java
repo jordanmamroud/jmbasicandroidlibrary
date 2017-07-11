@@ -3,6 +3,7 @@ package com.example.jordan.basicslibrary.Utilities.Utils;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.RelativeLayout;
 
 /**
@@ -18,6 +19,29 @@ public class ViewHelper {
             return false;
         }
     }
+
+    public static void hideViews(@Nullable Animation animation, View... views){
+        for (View v : views){
+            if(animation != null) {
+                v.startAnimation(animation);
+                v.setVisibility(View.INVISIBLE);
+            }else {
+                v.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    public static void showViews(@Nullable Animation animation,View... views){
+        for (View v : views){
+            if(animation != null) {
+                v.startAnimation(animation);
+            }
+            v.setClickable(true);
+            v.setVisibility(View.VISIBLE);
+        }
+    }
+
+
     // must put zero if no rule needs to be removed
     public static void addRuleToViews(int rule , @Nullable int ruleToRemoveOrZero, View... views){
         // adds a rule to multiple children of relative layout

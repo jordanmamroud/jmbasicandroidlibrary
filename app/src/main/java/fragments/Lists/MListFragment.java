@@ -13,6 +13,8 @@ import com.example.jordan.basicslibrary.Utilities.EventListeners.MOnItemSelected
 
 import java.util.ArrayList;
 
+import fragments.IAdapterDelegates;
+
 /**
  * Created by Jordan on 5/8/2017.
  */

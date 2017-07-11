@@ -1,4 +1,4 @@
-package fragments.GridView;
+package fragments.Lists.GridView;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import fragments.Lists.IAdapterDelegates;
+import fragments.IAdapterDelegates;
 
 
 /**
@@ -17,21 +17,17 @@ public class GridViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     ArrayList list ;
     private Context mContext;
-    private ArrayList<String> imageTitles ;
-    private ArrayList<Integer> images;
+    private ArrayList items  ;
     private IAdapterDelegates delegates ;
 
-
-    public GridViewAdapter(Context context, ArrayList<Integer> images, IAdapterDelegates delegates  ) {
+    public GridViewAdapter(Context context, ArrayList items,  IAdapterDelegates delegates  ) {
         this.mContext = context ;
-        this.images = images;
         this.delegates = delegates ;
     };
 
     public GridViewAdapter(Context context, ArrayList<Integer> images) {
         this.mContext = context ;
-        this.images = images;
-
+        this.items = images;
     };
 
     @Override
@@ -41,7 +37,7 @@ public class GridViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        delegates.onBindViewHolder( images, holder , position    );
+        delegates.onBindViewHolder( items, holder , position    );
     };
 
     // updates delegate prior to running notify data set changed
@@ -52,7 +48,7 @@ public class GridViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        return images.size();
+        return delegates.getList().size();
     }
 
 

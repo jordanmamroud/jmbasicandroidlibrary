@@ -1,4 +1,4 @@
-package fragments.GridView;
+package fragments.Lists.GridView;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -17,7 +17,7 @@ import com.example.jordan.basicslibrary.Utilities.Utils.MHelper;
 
 import java.util.ArrayList;
 
-import fragments.Lists.IAdapterDelegates;
+import fragments.IAdapterDelegates;
 
 /**
  * Created by Jordan on 7/7/2017.
@@ -33,11 +33,12 @@ public class GridViewDelegate implements IAdapterDelegates {
     private int elevation ;
     private int borderRadius;
     private boolean lockEnabled = false;
+    private ArrayList itemsList ;
 
-    public GridViewDelegate(Context mContext) {
+    public GridViewDelegate(Context mContext, ArrayList itemsList) {
         this.mContext = mContext;
         lockEnabled = false ;
-
+        this.itemsList = itemsList ;
     }
 
     // this constructor is used for locking feature, if not used lock feature must be set
@@ -86,6 +87,11 @@ public class GridViewDelegate implements IAdapterDelegates {
             lockEnabled = false ;
             availableImagesCount = -1;
         }
+    }
+
+    @Override
+    public ArrayList getList() {
+        return itemsList;
     }
 
     @Override
