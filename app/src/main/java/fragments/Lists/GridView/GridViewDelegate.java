@@ -51,12 +51,16 @@ public class GridViewDelegate implements IAdapterDelegates {
 
     @Override
     public void onBindViewHolder(ArrayList notneeded, RecyclerView.ViewHolder holder, int position) {
+       bindView(holder , itemsList.get(position), position);
+    }
+
+    public void bindView(RecyclerView.ViewHolder holder , Object imageLocation, int position){
         GridViewHolder mHolder = (GridViewHolder) holder ;
 
         mHolder.thumbnail.setScaleType(ImageView.ScaleType.FIT_XY);
 
         // sets up smooth image caching and loading
-        Glide.with(mContext).load(itemsList.get(position))
+        Glide.with(mContext).load(imageLocation)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into((ImageView) mHolder.thumbnail);
 
@@ -101,6 +105,7 @@ public class GridViewDelegate implements IAdapterDelegates {
     }
 
     public class GridViewHolder extends RecyclerView.ViewHolder{
+        // made public so extenders of gridviewholder can have access but do not access unless extending
         public FrameLayout layout ;
         public ImageView thumbnail ;
 
