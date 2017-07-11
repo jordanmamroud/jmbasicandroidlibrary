@@ -42,8 +42,9 @@ public class GridViewDelegate implements IAdapterDelegates {
     }
 
     // this constructor is used for locking feature, if not used lock feature must be set
-    public GridViewDelegate(Context mContext, int availableImagesCount) {
+    public GridViewDelegate(Context mContext,  ArrayList itemsList ,int availableImagesCount) {
         this.mContext = mContext;
+        this.itemsList = itemsList ;
         this.availableImagesCount = availableImagesCount;
         lockEnabled = true ;
     }
@@ -51,7 +52,6 @@ public class GridViewDelegate implements IAdapterDelegates {
     @Override
     public void onBindViewHolder(ArrayList itemsList, RecyclerView.ViewHolder holder, int position) {
         GridViewHolder mHolder = (GridViewHolder) holder ;
-
 
         mHolder.thumbnail.setScaleType(ImageView.ScaleType.FIT_XY);
 
