@@ -101,8 +101,8 @@ public class GridViewDelegate implements IAdapterDelegates {
     }
 
     public class GridViewHolder extends RecyclerView.ViewHolder{
-        FrameLayout layout ;
-        ImageView thumbnail ;
+        public FrameLayout layout ;
+        public ImageView thumbnail ;
 
         public GridViewHolder(View itemView , boolean lockEnabled ) {
             super(itemView);
