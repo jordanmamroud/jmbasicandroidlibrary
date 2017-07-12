@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observer;
 
-import fragments.UpdateableFragments;
-
 /**
  * Created by Jordan on 5/11/2017.
  */
@@ -20,6 +18,7 @@ public class ListPagerAdapter extends FragmentStatePagerAdapter{
 
     private List data;
     private IPagerItemFragment fragment;
+    private int screenLimit ;
 
     public ListPagerAdapter(FragmentManager fm){
         super(fm);
@@ -43,6 +42,7 @@ public class ListPagerAdapter extends FragmentStatePagerAdapter{
 
     @Override
     public Fragment getItem(int position) {
+
         Fragment currentFrag =  fragment.newInstance(data.get(position) , position);
         return   currentFrag;
     }
