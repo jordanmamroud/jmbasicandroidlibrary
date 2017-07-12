@@ -48,10 +48,10 @@ public class ListPagerFragment extends Fragment {
     }
 
     public void setupCallbacks(){
-        mViewPager.addOnPageChangeListener( new MOnPageChange( (int position) ->   onPageChange() ));
+        mViewPager.addOnPageChangeListener( new MOnPageChange( this :: onPageChange     ));
     }
 
-    public void setupViewPager(int offScreenLimit){
+    public void setupLayout(int offScreenLimit){
         mViewPager.setOffscreenPageLimit(offScreenLimit);
         mViewPager.setAdapter(adapter);
 
@@ -72,7 +72,9 @@ public class ListPagerFragment extends Fragment {
         this.adapter = adapter ;
     }
 
-    public void onPageChange(){}
+    public void onPageChange(int position){
+        this.currentPosition = position;
+    }
 
     public void setPageTransformer(ViewPager.PageTransformer pageTransformer){
         mViewPager.setPageTransformer( true, pageTransformer   );
@@ -114,8 +116,6 @@ public class ListPagerFragment extends Fragment {
     public void setOffScreenLimit(int limit){
         mViewPager.setOffscreenPageLimit(limit);
     }
-
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
