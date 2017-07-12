@@ -28,8 +28,7 @@ public class MHelper {
 
     public static int getPixelsFromDps(int dps, Context context) {
         final float scale = context.getResources().getDisplayMetrics().density;
-        int pixels = (int) (dps * scale + 0.5f);
-        return pixels;
+        return (int) (dps * scale + 0.5f);
     }
 
     public static int getDpsFromPixels(Context context ,int dp) {
@@ -45,9 +44,7 @@ public class MHelper {
         }
 
         return transaction ;
-
     }
-
 
     public static int getRandomNum(int max){
         Random random = new Random();
