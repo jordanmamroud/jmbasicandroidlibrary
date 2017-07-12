@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.jordan.basicslibrary.R;
+import com.example.jordan.basicslibrary.Utilities.Interfaces.IDrawableImage;
 import com.example.jordan.basicslibrary.Utilities.Utils.MHelper;
 
 import java.util.ArrayList;
@@ -26,49 +27,48 @@ import fragments.IAdapterDelegates;
 public class GridViewDelegate implements IAdapterDelegates {
 
     private Context mContext;
-
     private int availableImagesCount = 0;
-
-    private int margin ;
-    private int elevation ;
-    private int borderRadius;
     private boolean lockEnabled = false;
-    private ArrayList itemsList ;
 
-    public GridViewDelegate(Context mContext, ArrayList itemsList) {
+
+    public GridViewDelegate(Context mContext) {
         this.mContext = mContext;
         lockEnabled = false ;
-        this.itemsList = itemsList ;
     }
 
     // this constructor is used for locking feature, if not used lock feature must be set
-    public GridViewDelegate(Context mContext, ArrayList itemsList, int availableImagesCount) {
+    public GridViewDelegate(Context mContext, int availableImagesCount) {
         this.mContext = mContext;
         this.availableImagesCount = availableImagesCount;
-        this.itemsList = itemsList;
         lockEnabled = true ;
     }
 
     @Override
-    public void onBindViewHolder(ArrayList notneeded, RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(ArrayList itemsList, RecyclerView.ViewHolder holder, int position) {
         GridViewHolder mHolder = (GridViewHolder) holder ;
 
+        // sets up smooth image caching and loading checking that item has a image from resource.
+        if (itemsList.get( position) instanceof IDrawableImage) {
 
-        mHolder.thumbnail.setScaleType(ImageView.ScaleType.FIT_XY);
+            String imgLocation = ((IDrawableImage) itemsList.get(position)).getDrawableName();
 
-        // sets up smooth image caching and loading
-        Glide.with(mContext).load(itemsList.get(position))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into((ImageView) mHolder.thumbnail);
+            int imageId = mContext.getResources().getIdentifier(imgLocation, "drawable", mContext.getPackageName());
 
-        // hiding all lock views prior to showing available ones if lock view is enabled .
-        if(lockEnabled){
-            mHolder.removeLock();
+            Glide.with(mContext).load(imageId)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into((ImageView) mHolder.thumbnail);
+
+            // hiding all lock views prior to showing available ones if lock view is enabled .
+            if (lockEnabled) {
+                mHolder.removeLock();
+            }
+            // shows image as locked if lock feature is enabled and image is unavailble
+            if (position >= availableImagesCount && lockEnabled && availableImagesCount > -1) {
+                mHolder.enableLock();
+            }
+
         }
-        // shows image as locked if lock feature is enabled and image is unavailble
-        if(position >= availableImagesCount && lockEnabled   && availableImagesCount > -1) {
-            mHolder.enableLock();
-        }
+
     }
 
     public void setLockEnabled(boolean enableLock){
