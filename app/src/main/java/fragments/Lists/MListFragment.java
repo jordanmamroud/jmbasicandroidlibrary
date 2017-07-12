@@ -23,59 +23,44 @@ public class MListFragment extends Fragment {
 
     private RecyclerView list;
     private MOnItemSelected.OnItemClickListener onItemClickListener;
-    private IAdapterDelegates delegate ;
-    private ArrayList dataList ;
+
     private int layoutResource = 0;
     private int recyclerViewId ;
-    private IListFragment iActivity ;
 
-    public void setAdapterDelegate(IAdapterDelegates delegate){
-        this.delegate = delegate ;
-    }
+    private MListAdapter adapter ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        iActivity = (IListFragment) getActivity() ;
+        // this is for customizing layout resource
         if(layoutResource == 0){
             layoutResource= R.layout.fragment_list;
-
         }
         View view = inflater.inflate(layoutResource, container, false);
         instantiateView(view);
-        setupCallbacks();
-
         return view;
+    }
+
+    public void createAdapter(ArrayList listItems , IAdapterDelegates delegate){
+         this.adapter = new MListAdapter(  getContext(),  listItems , delegate );
+    }
+
+    public void setupLayout(){
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(  getContext()  );
+        list.setLayoutManager(linearLayoutManager);
+        list.setAdapter(adapter);
     }
 
     public void instantiateView(View view){
         list = (RecyclerView) view.findViewById(R.id.mListview);
-        if (list!= null){
-            MListAdapter adapter = new MListAdapter(getContext(), delegate, dataList);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-            list.setLayoutManager(linearLayoutManager);
-            list.setAdapter(adapter);
-        }
     }
 
-    public void setList(ArrayList list){ this.dataList = list ; }
+    public void setOnItemClickListener( MOnItemSelected onItemClickListener){
+        list.addOnItemTouchListener(    onItemClickListener );
+    }
 
     public void setContentView(int layoutResource, int recyclerViewId){
         this.layoutResource = layoutResource ;
         this.recyclerViewId = recyclerViewId ;
-    }
-
-    public void setupCallbacks(){
-        // gets event from activity
-        list.addOnItemTouchListener(new MOnItemSelected(getContext(),
-                (View view, int position)-> iActivity.onListItemSelected(position, dataList.get(position))));
-    }
-
-    public void  setOnItemClick(MOnItemSelected.OnItemClickListener onItemClick){
-        this.onItemClickListener = onItemClick;
-    }
-
-    public interface IListFragment {
-        public void onListItemSelected(int position, Object object);
     }
 
 }

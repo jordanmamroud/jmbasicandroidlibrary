@@ -42,25 +42,22 @@ public class GridViewDelegate implements IAdapterDelegates {
     }
 
     // this constructor is used for locking feature, if not used lock feature must be set
-    public GridViewDelegate(Context mContext,  ArrayList itemsList ,int availableImagesCount) {
+    public GridViewDelegate(Context mContext, ArrayList itemsList, int availableImagesCount) {
         this.mContext = mContext;
-        this.itemsList = itemsList ;
         this.availableImagesCount = availableImagesCount;
+        this.itemsList = itemsList;
         lockEnabled = true ;
     }
 
     @Override
     public void onBindViewHolder(ArrayList notneeded, RecyclerView.ViewHolder holder, int position) {
-       bindView(holder , itemsList.get(position), position);
-    }
-
-    public void bindView(RecyclerView.ViewHolder holder , Object imageLocation, int position){
         GridViewHolder mHolder = (GridViewHolder) holder ;
+
 
         mHolder.thumbnail.setScaleType(ImageView.ScaleType.FIT_XY);
 
         // sets up smooth image caching and loading
-        Glide.with(mContext).load(imageLocation)
+        Glide.with(mContext).load(itemsList.get(position))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into((ImageView) mHolder.thumbnail);
 
@@ -94,20 +91,14 @@ public class GridViewDelegate implements IAdapterDelegates {
     }
 
     @Override
-    public ArrayList getList() {
-        return itemsList;
-    }
-
-    @Override
     public RecyclerView.ViewHolder createViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_locked_image, parent, false);
         return new GridViewHolder(v  , lockEnabled  );
     }
 
     public class GridViewHolder extends RecyclerView.ViewHolder{
-        // made public so extenders of gridviewholder can have access but do not access unless extending
-        public FrameLayout layout ;
-        public ImageView thumbnail ;
+        FrameLayout layout ;
+        ImageView thumbnail ;
 
         public GridViewHolder(View itemView , boolean lockEnabled ) {
             super(itemView);

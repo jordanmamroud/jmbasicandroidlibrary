@@ -11,7 +11,6 @@ import com.example.jordan.basicslibrary.R;
 import com.example.jordan.basicslibrary.Utilities.EventListeners.MOnPageChange;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Jordan on 5/11/2017.
@@ -20,66 +19,71 @@ import java.util.List;
 public class ListPagerFragment extends Fragment {
 
     private ArrayList itemsList;
-
     private ViewPager mViewPager ;
     private ListPagerAdapter adapter;
-    private IListPager iActivity ;
+    private IPagerItemFragment pagerItemFragment ;
 
     // default values
+    private int screenLimitDefault = 1 ;
     private int currentPosition = 0;
-    private int offScreenLimit = 1;
     private boolean isInitialized = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_pager_view, container, false);
-
         // sets up all our class variables
         instantiateView(savedInstanceState , v );
-        setupCallbacks();
-
-        // sets text of header in activity
-        iActivity.setCurrentPositionTxt(currentPosition);
-
-        // this is used so that if viewpager needs to be opened at specific position it will be . otherwise will just open to position 0 ;
-        mViewPager.getViewTreeObserver().addOnGlobalLayoutListener( this ::  setupLayout );
-
         return v;
     }
 
     public void instantiateView(Bundle savedInstanceState, View v){
         if(savedInstanceState != null) {
             currentPosition = savedInstanceState.getInt("savedPosition");
-            offScreenLimit = savedInstanceState.getInt("offScreenLimit");
             isInitialized = false ;
         }
-
-        iActivity = (IListPager) getActivity();
-        itemsList = (ArrayList) iActivity.getList();
-
-        adapter = new ListPagerAdapter(getChildFragmentManager(), itemsList,  iActivity.getPagerFragmentType());
         mViewPager = (ViewPager) v.findViewById(R.id.pager);
+    }
+
+    public void setupViewPager(int offScreenLimit){
         mViewPager.setOffscreenPageLimit(offScreenLimit);
         mViewPager.setAdapter(adapter);
-        setPageTransformer();
+
+        // this is used so that if viewpager needs to be opened at specific position it will be . otherwise will just open to position 0 ;
+        mViewPager.getViewTreeObserver().addOnGlobalLayoutListener( this ::  setupLayoutListener );
     }
 
-    public void setPageTransformer(){
-        mViewPager.setPageTransformer( true,  iActivity.getPageTransformer()    );
-    }
-
-    public void setupLayout(){
+    public void setupLayoutListener(){
+        // doing this to setcurrent item beyond 0 wont work if not done
         if (!isInitialized) {
             mViewPager.setCurrentItem(currentPosition);
             isInitialized = true;
         }
     }
 
-    public void setupCallbacks(){
-        mViewPager.addOnPageChangeListener(new MOnPageChange((int p)->{
-                currentPosition = p;
-                iActivity.onPageChange(p);
-        }));
+    public void createAdapter(ArrayList itemsList, IPagerItemFragment iPagerItemFragment){
+        this.itemsList = itemsList ;
+        this.pagerItemFragment = iPagerItemFragment ;
+        adapter = new ListPagerAdapter(getChildFragmentManager(), itemsList , iPagerItemFragment);
+    }
+
+    public void setOnPageChangeListener( MOnPageChange onPageChangeListener){
+        mViewPager.addOnPageChangeListener(onPageChangeListener);
+    }
+
+    public void setPageTransformer(ViewPager.PageTransformer pageTransformer){
+        mViewPager.setPageTransformer( true,  pageTransformer    );
+    }
+
+    public void setItemsList(ArrayList itemsList){
+        this.itemsList = itemsList;
+    }
+
+    public void setPagerItemFragment(IPagerItemFragment pagerItemFragment){
+        this.pagerItemFragment = pagerItemFragment;
+    }
+
+    public void setAdapter(ListPagerAdapter adapter){
+        this.adapter = adapter ;
     }
 
     public void moveNext() {
@@ -92,16 +96,15 @@ public class ListPagerFragment extends Fragment {
         mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
     }
 
-
-
     public int getCurrentPosition(){
-        if(mViewPager != null) {
-            return mViewPager.getCurrentItem();
-        }else return 0 ;
+         return currentPosition ;
     }
 
     public void setCurrentPosition(int currentPosition) {
         this.currentPosition = currentPosition;
+        if(mViewPager !=    null){
+            mViewPager.setCurrentItem(  currentPosition   );
+        }
     }
 
     public ViewPager getViewPager(){
@@ -113,22 +116,15 @@ public class ListPagerFragment extends Fragment {
     }
 
     public void setOffScreenLimit(int limit){
-        this.offScreenLimit  = limit;
+        mViewPager.setOffscreenPageLimit(limit);
     }
+
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("savedPosition", mViewPager.getCurrentItem());
-        outState.putInt("offScreenLimit", offScreenLimit);
     }
-
-   public interface IListPager{
-       List getList();
-       void onPageChange(int p);
-       IPagerItemFragment getPagerFragmentType();
-       void setCurrentPositionTxt(int pos);
-       ViewPager.PageTransformer getPageTransformer();
-   };
 
 }

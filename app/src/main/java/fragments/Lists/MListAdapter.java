@@ -19,17 +19,12 @@ public class MListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private Context context;
     private IAdapterDelegates delegate ;
 
-    public MListAdapter(Context context , IAdapterDelegates delegate){
-        this.context = context ;
-        this.delegate =delegate ;
-    }
 
-    public MListAdapter(Context context, IAdapterDelegates delegate, ArrayList list ){
+    public MListAdapter(Context context, ArrayList list,  IAdapterDelegates delegate ){
         this.list = list;
         this.context = context;
         this.delegate = delegate ;
     }
-
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -45,6 +40,4 @@ public class MListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public int getItemCount() {
         return list.size();
     }
-
-
 }

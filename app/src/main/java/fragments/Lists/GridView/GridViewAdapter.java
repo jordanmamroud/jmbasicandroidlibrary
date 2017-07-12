@@ -17,17 +17,12 @@ public class GridViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     ArrayList list ;
     private Context mContext;
-    private ArrayList items  ;
     private IAdapterDelegates delegates ;
 
     public GridViewAdapter(Context context, ArrayList items,  IAdapterDelegates delegates  ) {
         this.mContext = context ;
         this.delegates = delegates ;
-    };
-
-    public GridViewAdapter(Context context, ArrayList<Integer> images) {
-        this.mContext = context ;
-        this.items = images;
+        this.list = items ;
     };
 
     @Override
@@ -37,7 +32,7 @@ public class GridViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        delegates.onBindViewHolder( items, holder , position    );
+        delegates.onBindViewHolder( list, holder , position    );
     };
 
     // updates delegate prior to running notify data set changed
@@ -48,7 +43,7 @@ public class GridViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        return delegates.getList().size();
+        return list.size();
     }
 
 

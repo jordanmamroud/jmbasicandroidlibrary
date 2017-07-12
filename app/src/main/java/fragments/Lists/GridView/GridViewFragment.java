@@ -20,51 +20,50 @@ import fragments.IAdapterDelegates;
 public class GridViewFragment extends Fragment {
 
     private String OUTSTATE_KEY_NUMIMAGES = "numOfAvailableImages" ;
-    private RecyclerView imagesGrid ;
+    private RecyclerView mRecyclerView;
     private ArrayList items = new ArrayList<>();
     private GridViewAdapter gridViewAdapter ;
-    private IGridViewFragment iActivity ;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(  R.layout.fragment_grid_view   , container , false   );
-
-        iActivity = (IGridViewFragment) getActivity() ;
-        items = iActivity.getGridItems();
         instantiateView(v);
-        setupCallbacks();
         return v    ;
     }
 
     public void instantiateView(View v){
-        RecyclerView.LayoutManager manager = new GridLayoutManager(getContext(), 2);
-        gridViewAdapter = new GridViewAdapter(getContext(), items  ,   iActivity.getViewDelegate()    );
-        imagesGrid = (RecyclerView) v.findViewById(R.id.imagesGrid);
-        imagesGrid.setLayoutManager(manager);
-        imagesGrid.setAdapter(gridViewAdapter);
+        mRecyclerView = (RecyclerView) v.findViewById(R.id.imagesGrid);
     }
 
+    public void setupLayout(int itemsOnLine){
+        RecyclerView.LayoutManager manager = new GridLayoutManager(getContext(), itemsOnLine);
+        mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.setAdapter(gridViewAdapter);
+    }
+    // must be called before setuplayout or adapter will be null unles setAdapter was called.
+    public void createGridViewAdapter( ArrayList itemsList, IAdapterDelegates delegates){
+        this.items = itemsList ;
+        gridViewAdapter = new GridViewAdapter(getContext(), itemsList, delegates);
+    }
+
+    public void setOnItemClick(MOnItemSelected onItemSelected){
+        mRecyclerView.addOnItemTouchListener(onItemSelected);
+    }
+
+   public void setGridViewAdapter(GridViewAdapter adapter){
+       this.gridViewAdapter = adapter;
+   }
+
     public void update(Object o ){
-        if(gridViewAdapter != null) {
+        if(gridViewAdapter !=null) {
             gridViewAdapter.updateDelegate(o);
         }
     }
 
-    public void setupCallbacks() {
-        // method is called from inside activity because it opens new fragment
-        imagesGrid.addOnItemTouchListener( new MOnItemSelected(getContext() ,
-                (View v ,int position)->  iActivity.onGridImageClick(position)));
-    } ;
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-    }
-
-    public interface IGridViewFragment{
-        void onGridImageClick(int position);
-        ArrayList getGridItems();
-        IAdapterDelegates getViewDelegate();
     }
 
 }

@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observer;
 
@@ -18,11 +19,24 @@ public class ListPagerAdapter extends FragmentStatePagerAdapter{
     private List data;
     private IPagerItemFragment fragment;
 
-
-    public ListPagerAdapter(FragmentManager fm, List data,  IPagerItemFragment fragment){
+    public ListPagerAdapter(FragmentManager fm){
         super(fm);
         this.data = data;
         this.fragment = fragment;
+    }
+
+    public ListPagerAdapter(FragmentManager fm, ArrayList data, IPagerItemFragment fragment){
+        super(fm);
+        this.data = data;
+        this.fragment = fragment;
+    }
+
+    public void setList(){
+        this.data = data ;
+    };
+
+    public void setPagerFragmentType(IPagerItemFragment iPagerItemFragment){
+        this.fragment = iPagerItemFragment ;
     }
 
     @Override
@@ -30,7 +44,6 @@ public class ListPagerAdapter extends FragmentStatePagerAdapter{
         Fragment currentFrag =  fragment.newInstance(data.get(position) , position);
         return   currentFrag;
     }
-
 
     @Override
     public int getCount() {
