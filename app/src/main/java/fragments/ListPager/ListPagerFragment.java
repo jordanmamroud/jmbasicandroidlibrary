@@ -8,9 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.jordan.basicslibrary.R;
+import Animations.ViewPagerAnimations.BaseTransformer;
 import com.example.jordan.basicslibrary.Utilities.EventListeners.MOnPageChange;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Jordan on 5/11/2017.
@@ -21,7 +23,6 @@ public class ListPagerFragment extends Fragment {
     private ArrayList itemsList;
     private ViewPager mViewPager ;
     private ListPagerAdapter adapter;
-    private IPagerItemFragment pagerItemFragment ;
 
     // default values
     private int screenLimitDefault = 1 ;
@@ -33,6 +34,7 @@ public class ListPagerFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_pager_view, container, false);
         // sets up all our class variables
         instantiateView(savedInstanceState , v );
+        setupCallbacks();
         return v;
     }
 
@@ -42,6 +44,11 @@ public class ListPagerFragment extends Fragment {
             isInitialized = false ;
         }
         mViewPager = (ViewPager) v.findViewById(R.id.pager);
+
+    }
+
+    public void setupCallbacks(){
+        mViewPager.addOnPageChangeListener( new MOnPageChange( (int position) ->   onPageChange() ));
     }
 
     public void setupViewPager(int offScreenLimit){
@@ -60,30 +67,19 @@ public class ListPagerFragment extends Fragment {
         }
     }
 
-    public void createAdapter(ArrayList itemsList, IPagerItemFragment iPagerItemFragment){
-        this.itemsList = itemsList ;
-        this.pagerItemFragment = iPagerItemFragment ;
-        adapter = new ListPagerAdapter(getChildFragmentManager(), itemsList , iPagerItemFragment);
+    // must be call first .
+    public void setAdapter(ListPagerAdapter adapter){
+        this.adapter = adapter ;
     }
 
-    public void setOnPageChangeListener( MOnPageChange onPageChangeListener){
-        mViewPager.addOnPageChangeListener(onPageChangeListener);
-    }
+    public void onPageChange(){}
 
     public void setPageTransformer(ViewPager.PageTransformer pageTransformer){
-        mViewPager.setPageTransformer( true,  pageTransformer    );
+        mViewPager.setPageTransformer( true, pageTransformer   );
     }
 
     public void setItemsList(ArrayList itemsList){
         this.itemsList = itemsList;
-    }
-
-    public void setPagerItemFragment(IPagerItemFragment pagerItemFragment){
-        this.pagerItemFragment = pagerItemFragment;
-    }
-
-    public void setAdapter(ListPagerAdapter adapter){
-        this.adapter = adapter ;
     }
 
     public void moveNext() {

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
 import com.example.jordan.basicslibrary.R;
 import com.example.jordan.basicslibrary.Utilities.EventListeners.MOnItemSelected;
 
@@ -24,11 +25,11 @@ public class GridViewFragment extends Fragment {
     private ArrayList items = new ArrayList<>();
     private GridViewAdapter gridViewAdapter ;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(  R.layout.fragment_grid_view   , container , false   );
         instantiateView(v);
+        setupCallbacks();
         return v    ;
     }
 
@@ -36,24 +37,29 @@ public class GridViewFragment extends Fragment {
         mRecyclerView = (RecyclerView) v.findViewById(R.id.imagesGrid);
     }
 
+    public void setupCallbacks(){
+        mRecyclerView.addOnItemTouchListener(
+                new MOnItemSelected( getContext() , this :: onItemClicked ));
+    }
+
     public void setupLayout(int itemsOnLine){
         RecyclerView.LayoutManager manager = new GridLayoutManager(getContext(), itemsOnLine);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(gridViewAdapter);
     }
+
     // must be called before setuplayout or adapter will be null unles setAdapter was called.
-    public void createGridViewAdapter( ArrayList itemsList, IAdapterDelegates delegates){
-        this.items = itemsList ;
-        gridViewAdapter = new GridViewAdapter(getContext(), itemsList, delegates);
+    public void setGridViewAdapter(GridViewAdapter adapter){
+        this.gridViewAdapter = adapter;
     }
 
-    public void setOnItemClick(MOnItemSelected onItemSelected){
-        mRecyclerView.addOnItemTouchListener(onItemSelected);
+    public void onItemClicked(View v , int pos){
+
     }
 
-   public void setGridViewAdapter(GridViewAdapter adapter){
-       this.gridViewAdapter = adapter;
-   }
+    public GridViewAdapter getAdapter(){
+        return gridViewAdapter ;
+    }
 
     public void update(Object o ){
         if(gridViewAdapter !=null) {

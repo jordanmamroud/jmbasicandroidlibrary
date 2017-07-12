@@ -3,11 +3,15 @@ package com.example.jordan.basicslibrary.Utilities.Utils;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Point;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.DisplayMetrics;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 
 import java.util.Random;
 

@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observer;
 
+import fragments.UpdateableFragments;
+
 /**
  * Created by Jordan on 5/11/2017.
  */

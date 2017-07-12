@@ -15,6 +15,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.jordan.basicslibrary.R;
 import com.example.jordan.basicslibrary.Utilities.Interfaces.IDrawableImage;
 import com.example.jordan.basicslibrary.Utilities.Utils.MHelper;
+import com.example.jordan.basicslibrary.Utilities.Utils.ViewHelper;
 
 import java.util.ArrayList;
 
@@ -37,7 +38,7 @@ public class GridViewDelegate implements IAdapterDelegates {
     }
 
     // this constructor is used for locking feature, if not used lock feature must be set
-    public GridViewDelegate(Context mContext, int availableImagesCount) {
+    public GridViewDelegate(Context mContext,  int availableImagesCount) {
         this.mContext = mContext;
         this.availableImagesCount = availableImagesCount;
         lockEnabled = true ;

@@ -12,6 +12,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Transformation;
 
+import com.daimajia.androidanimations.library.sliders.SlideInUpAnimator;
+import com.daimajia.androidanimations.library.sliders.SlideOutDownAnimator;
 import com.example.jordan.basicslibrary.Utilities.Utils.ViewHelper;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Rotate;
@@ -27,7 +29,7 @@ import com.transitionseverywhere.extra.Scale;
 
 public class MAnimator {
 
-    public static void startAnimation(Context context , View viewToAnimate,int animationId ){
+    public static void startAnimation(Context context , View viewToAnimate, int animationId ){
          Animation rotation = AnimationUtils.loadAnimation(context, animationId );
          viewToAnimate.startAnimation(rotation);
     }
@@ -52,7 +54,6 @@ public class MAnimator {
             v.setVisibility(View.VISIBLE);
         }
     }
-
 
     public static void collapse(  final int initialHeight, final View v) {
         Animation a = new Animation() {
@@ -102,14 +103,39 @@ public class MAnimator {
         a.setDuration(400);
         v.startAnimation(a);
     }
+// methods for android view animation library ;
+    public static void slideInUp(View... views ){
+
+        SlideInUpAnimator slideInUpAnimator = new SlideInUpAnimator();
+        for (View v : views){
+            // only views that are not already visible get animated or else looks messed up
+            if( !ViewHelper.isViewVisible(v ) ) {
+                slideInUpAnimator.prepare(v);
+                v.setVisibility(View.VISIBLE);
+                slideInUpAnimator.animate();
+            }
+        }
+    }
+
+    public static void slideOutDown(View... views){
+        for (View v : views){
+            // only views that are already visible get animated or else looks messed up
+            if(ViewHelper.isViewVisible(v ) ) {
+                SlideOutDownAnimator slideOutDownAnimator = new SlideOutDownAnimator();
+                slideOutDownAnimator.prepare(v);
+                v.setVisibility(View.INVISIBLE);
+                slideOutDownAnimator.animate();
+            }
+        }
+    }
+
+// end methods for android view animation library
 
 
     public static void slideFromLeft(ViewGroup view , int duration){
         Slide slide = new Slide(Gravity.RIGHT);
         slide.setDuration(duration);
-
         TransitionManager.beginDelayedTransition(   view  , slide  );
-
     }
 
     public static void slideFromRight(ViewGroup view , int duration){
@@ -141,7 +167,7 @@ public class MAnimator {
     // only used in this class but is static because static methods can only use static methods
     private static void beginTransition(View v , int duration ){
         // creates a bubble toggleFade effect
-        System.out.println(duration);
+
         boolean visible = ViewHelper.isViewVisible(v);
 
         TransitionSet set = new TransitionSet();

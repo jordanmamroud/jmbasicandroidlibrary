@@ -8,10 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
 import com.example.jordan.basicslibrary.R;
 import com.example.jordan.basicslibrary.Utilities.EventListeners.MOnItemSelected;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import fragments.IAdapterDelegates;
 
@@ -37,11 +39,17 @@ public class MListFragment extends Fragment {
         }
         View view = inflater.inflate(layoutResource, container, false);
         instantiateView(view);
+        setupCallbacks();
         return view;
     }
+    // must be called first
+    public void setAdapter( MListAdapter adapter){
+         this.adapter = adapter ;
+    }
 
-    public void createAdapter(ArrayList listItems , IAdapterDelegates delegate){
-         this.adapter = new MListAdapter(  getContext(),  listItems , delegate );
+    public void setupCallbacks(){
+        list.addOnItemTouchListener(
+                new MOnItemSelected( getContext() , this :: onItemSelected  ));
     }
 
     public void setupLayout(){
@@ -54,8 +62,8 @@ public class MListFragment extends Fragment {
         list = (RecyclerView) view.findViewById(R.id.mListview);
     }
 
-    public void setOnItemClickListener( MOnItemSelected onItemClickListener){
-        list.addOnItemTouchListener(    onItemClickListener );
+    public void onItemSelected(View v , int position){
+
     }
 
     public void setContentView(int layoutResource, int recyclerViewId){
