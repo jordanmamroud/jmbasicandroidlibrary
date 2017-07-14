@@ -39,7 +39,12 @@ public class GridViewFragment extends Fragment {
 
     public void setupCallbacks(){
         mRecyclerView.addOnItemTouchListener(
-                new MOnItemSelected( getContext() , this :: onItemClicked ));
+                new MOnItemSelected(getContext(), new MOnItemSelected.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        onItemClicked(view, position);
+                    }
+                }));
     }
 
     public void setupLayout(int itemsOnLine){
