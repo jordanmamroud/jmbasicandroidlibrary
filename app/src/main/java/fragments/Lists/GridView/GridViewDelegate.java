@@ -82,8 +82,9 @@ public class GridViewDelegate implements IAdapterDelegates {
 
     @Override
     public void update(Object o) {
+        System.out.println("being updated");
         // show all images if they are locked , or if new num of available images is passed int as object set it as that ;
-        if(o != null){
+        if(o != null  && o instanceof Integer ){
             availableImagesCount = (int) o  ;
         }else {
             lockEnabled = false ;

@@ -46,6 +46,28 @@ public class MHelper {
         return transaction ;
     }
 
+    public static void setupFragment(FragmentManager fm, int contentId, Fragment fragment, String fragTag , @Nullable String backstackTag ){
+        FragmentTransaction transaction = fm.beginTransaction();
+        if( backstackTag != null) {
+            transaction.addToBackStack(backstackTag);
+        }
+        transaction.replace(contentId, fragment,    fragTag);
+        transaction.commit();
+    }
+
+
+    public static void setupFragment(FragmentManager fm, int contentId, Fragment fragment, String fragTag ,
+                                     int animIn, int animOut, @Nullable String backstackTag ){
+
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.setCustomAnimations(animIn, animOut);
+        if( backstackTag != null) {
+            transaction.addToBackStack(backstackTag);
+        }
+        transaction.replace(contentId, fragment,    fragTag);
+        transaction.commit();
+    }
+
     public static int getRandomNum(int max){
         Random random = new Random();
         return random.nextInt(max);

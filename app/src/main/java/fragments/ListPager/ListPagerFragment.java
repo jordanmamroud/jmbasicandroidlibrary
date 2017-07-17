@@ -28,26 +28,14 @@ public class ListPagerFragment extends Fragment {
     // ie. page transformer , offscreen limit and setup layout should never be called in oncreate view
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_pager_view, container, false);
-
-        // sets up all our class variables
-        instantiateView(savedInstanceState , v );
-        setupCallbacks();
-
-        return v;
-    }
-
-    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupLayout();
     }
 
-    public void instantiateView(Bundle savedInstanceState, View v){
+    public void instantiateView(Bundle savedInstanceState, ViewPager viewPager){
         if(savedInstanceState != null) currentPosition = savedInstanceState.getInt("savedPosition");
-
-        mViewPager = (ViewPager) v.findViewById(R.id.pager);
+        this.mViewPager = viewPager;
     }
 
     public void setupCallbacks(){

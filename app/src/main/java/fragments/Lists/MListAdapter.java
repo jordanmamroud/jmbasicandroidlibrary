@@ -21,6 +21,7 @@ public class MListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private IAdapterDelegates delegate ;
 
 
+
     public MListAdapter(Context context, ArrayList list,  IAdapterDelegates delegate ){
         this.list = list;
         this.context = context;
