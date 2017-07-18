@@ -60,7 +60,7 @@ public class MHelper {
                                      int animIn, int animOut, @Nullable String backstackTag ){
 
         FragmentTransaction transaction = fm.beginTransaction();
-        transaction.setCustomAnimations(animIn, animOut);
+        transaction.setCustomAnimations(animIn, animOut, animIn, animOut);
         if( backstackTag != null) {
             transaction.addToBackStack(backstackTag);
         }
@@ -82,7 +82,6 @@ public class MHelper {
     }
 
     public static boolean isDefaultLandscape(final Context context) {
-
         int orientation = context.getResources().getConfiguration().orientation;
 
         if(orientation == Configuration.ORIENTATION_PORTRAIT){

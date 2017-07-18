@@ -43,6 +43,5 @@ public class GlideLayoutTarget extends ViewGroupTarget  {
         else{
             view.setBackground(new BitmapDrawable(context.getResources(),(Bitmap) resource));
         }
-
     }
 }

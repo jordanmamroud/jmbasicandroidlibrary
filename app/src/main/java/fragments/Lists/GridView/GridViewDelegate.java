@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.example.jordan.basicslibrary.R;
 import com.example.jordan.basicslibrary.Utilities.Interfaces.IDrawableImage;
 import com.example.jordan.basicslibrary.Utilities.Utils.MHelper;
@@ -56,8 +57,11 @@ public class GridViewDelegate implements IAdapterDelegates {
             int imageId = mContext.getResources().getIdentifier(imgLocation, "drawable", mContext.getPackageName());
 
             Glide.with(mContext).load(imageId)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into((ImageView) mHolder.thumbnail);
+                    .asBitmap()
+                    .dontAnimate()
+                    .override(100,100)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .into( mHolder.thumbnail);
 
             // hiding all lock views prior to showing available ones if lock view is enabled .
             if (lockEnabled) {
@@ -69,7 +73,6 @@ public class GridViewDelegate implements IAdapterDelegates {
             }
 
         }
-
     }
 
     public void setLockEnabled(boolean enableLock){
