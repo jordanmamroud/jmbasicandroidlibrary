@@ -15,23 +15,31 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Transformation;
 
-import com.daimajia.androidanimations.library.BaseViewAnimator;
-import com.daimajia.androidanimations.library.fading_entrances.FadeInAnimator;
-import com.daimajia.androidanimations.library.fading_entrances.FadeInUpAnimator;
-import com.daimajia.androidanimations.library.fading_exits.FadeOutAnimator;
-import com.daimajia.androidanimations.library.fading_exits.FadeOutDownAnimator;
-import com.daimajia.androidanimations.library.sliders.SlideInLeftAnimator;
-import com.daimajia.androidanimations.library.sliders.SlideInRightAnimator;
-import com.daimajia.androidanimations.library.sliders.SlideInUpAnimator;
-import com.daimajia.androidanimations.library.sliders.SlideOutDownAnimator;
-import com.daimajia.androidanimations.library.zooming_entrances.ZoomInAnimator;
-import com.daimajia.androidanimations.library.zooming_exits.ZoomOutAnimator;
-import com.example.jordan.basicslibrary.Utilities.Utils.ViewHelper;
+
 
 import com.transitionseverywhere.Rotate;
 import com.transitionseverywhere.TransitionManager;
 
-import java.lang.reflect.Method;
+
+import Animations.avm.BaseViewAnimator;
+import Animations.avm.fading_entrances.FadeInAnimator;
+import Animations.avm.fading_entrances.FadeInDownAnimator;
+import Animations.avm.fading_entrances.FadeInUpAnimator;
+import Animations.avm.fading_exits.FadeOutAnimator;
+import Animations.avm.fading_exits.FadeOutDownAnimator;
+import Animations.avm.fading_exits.FadeOutUpAnimator;
+import Animations.avm.sliders.SlideInDownAnimator;
+import Animations.avm.sliders.SlideInLeftAnimator;
+import Animations.avm.sliders.SlideInRightAnimator;
+import Animations.avm.sliders.SlideInUpAnimator;
+import Animations.avm.sliders.SlideOutDownAnimator;
+import Animations.avm.sliders.SlideOutLeftAnimator;
+import Animations.avm.sliders.SlideOutRightAnimator;
+import Animations.avm.sliders.SlideOutUpAnimator;
+import Animations.avm.specials.RollInAnimator;
+import Animations.avm.specials.RollOutAnimator;
+import Animations.avm.zooming_entrances.ZoomInAnimator;
+import Animations.avm.zooming_exits.ZoomOutUpAnimator;
 
 
 /**
@@ -44,158 +52,11 @@ public class MAnimator {
          Animation rotation = AnimationUtils.loadAnimation(context, animationId );
          viewToAnimate.startAnimation(rotation);
     }
-
-    public static void hideViews(@Nullable Animation animation, View... views){
-        for (View v : views){
-            if(animation != null) {
-                v.startAnimation(animation);
-                v.setVisibility(View.INVISIBLE);
-            }else {
-                v.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    public static void showViews(@Nullable Animation animation,View... views){
-        for (View v : views){
-            if(animation != null) {
-                v.startAnimation(animation);
-            }
-            v.setClickable(true);
-            v.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public static void collapse(  final int initialHeight, final View v) {
-        Animation a = new Animation() {
-            @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                if (interpolatedTime == 1) {
-                    v.setVisibility(View.GONE);
-                } else {
-
-                    v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
-                    v.requestLayout();
-                }
-            }
-
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
-        a.setDuration(200);
-        v.startAnimation(a);
-    }
-
-
-    public static void expand(final int initialHeight, final View v ){
-        v.measure(ViewPager.LayoutParams.MATCH_PARENT, ViewPager.LayoutParams.WRAP_CONTENT);
-
-        v.getLayoutParams().height = 1;
-        v.setVisibility(View.VISIBLE);
-        Animation a = new Animation()
-        {
-            @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                v.getLayoutParams().height = interpolatedTime == 1
-                        ? ViewPager.LayoutParams.WRAP_CONTENT
-                        : (int)(initialHeight * interpolatedTime);
-
-                v.requestLayout();
-            }
-
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
-
-        a.setDuration(400);
-        v.startAnimation(a);
-    }
-// methods for android view animation library ;
-    public static void slideInUp(View... views ){
-        SlideInUpAnimator slideInUpAnimator = new SlideInUpAnimator();
-        for (View v : views){
-            // only views that are not already visible get animated or else looks messed up
-
-            slideInUpAnimator.prepare(v);
-            v.setVisibility(View.VISIBLE);
-            slideInUpAnimator.animate();
-
-        }
-    }
-
-    public static void slideOutDown(View... views){
-        for (View v : views){
-            // only views that are already visible get animated or else looks messed up
-            SlideOutDownAnimator slideOutDownAnimator = new SlideOutDownAnimator();
-            slideOutDownAnimator.prepare(v);
-            v.setVisibility(View.INVISIBLE);
-            slideOutDownAnimator.animate();
-        }
-    }
-
-    public static void zoomIn(int duration, View... views){
-        ZoomInAnimator zoomInAnimator = new ZoomInAnimator();
-        if(duration!=0)zoomInAnimator.setDuration(duration);
-
-        animateIn( (View v)->{
-            zoomInAnimator.prepare(v);
-            v.setVisibility(View.VISIBLE);
-            zoomInAnimator.animate();
-        },   views);
-
-    }
-
-    public static void fadeOutDown(int duration, boolean keepViewsInLayout ,View... views){
-        FadeOutDownAnimator fadeOutDownAnimator = new FadeOutDownAnimator();
-        fadeOutDownAnimator.addAnimatorListener( onOutAnimationEnd(keepViewsInLayout , views    ));
-        if(duration != 0) fadeOutDownAnimator.setDuration(duration);
-
-        for(View v : views){
-            v.clearAnimation();
-            fadeOutDownAnimator.prepare(v);
-        }
-        fadeOutDownAnimator.animate();
-    }
-
-    public static void fadeInUp (@Nullable int duration, View... views){
-        FadeInUpAnimator fadeInUpAnimator = new FadeInUpAnimator();
-        fadeInUpAnimator.addAnimatorListener( onInAnimationEnd(views));
-        if(duration != 0) fadeInUpAnimator.setDuration(duration);
-        animateIn( (View v )->{
-            v.clearAnimation();
-            fadeInUpAnimator.prepare(v);
-            fadeInUpAnimator.animate();
-            v.setVisibility(View.VISIBLE);
-        },  views    );
-    }
-
-    public static void slideInLeft(ViewGroup view , int duration){
-        SlideInLeftAnimator slideInLeftAnimator = new SlideInLeftAnimator();
-        if(duration !=0) slideInLeftAnimator.setDuration( duration   );
-        slideInLeftAnimator.prepare(view);
-        slideInLeftAnimator.animate();
-    }
-
-    public static void slideInRight(ViewGroup view , int duration){
-        SlideInRightAnimator slideInRightAnimator = new SlideInRightAnimator();
-        if(duration != 0 ) slideInRightAnimator.prepare(view);
-        slideInRightAnimator.animate();
-        view.setVisibility(View.VISIBLE);
-    }
-
-    public static void rotate(View viewToAnimate, boolean isRotated){
-        TransitionManager.beginDelayedTransition((ViewGroup) viewToAnimate.getParent() , new Rotate());
-        viewToAnimate.setRotation(isRotated ? 135 : 0);
-    }
-
+    // get rid of toggler
     public static void toggleFade(  View... viewsToFade){
         for (View v : viewsToFade) {
             if(v.getVisibility() == View.VISIBLE){
-                fadeOutDown(0, true, v );
+                fadeOutDown(0, v );
             }else {
                 fadeInUp(0, v);
             }
@@ -210,47 +71,109 @@ public class MAnimator {
         }
     }
 
-    public static void fadeOut(int duration, View... views){
-        FadeOutAnimator fadeOutAnimator = new FadeOutAnimator();
-        for (View v : views) {
-            v.clearAnimation();
-            fadeOutAnimator.prepare(v);
-            if (duration != 0) fadeOutAnimator.setDuration(duration);
-            fadeOutAnimator.animate();
+
+    public static void hideViews(@Nullable Animation animation, View... views){
+        for (View v : views){
+            if(animation != null) {
+                v.startAnimation(animation);
+                v.setVisibility(View.INVISIBLE);
+            }else {
+                v.setVisibility(View.GONE);
+            }
         }
     }
 
-    public static void fadeIn(int duration, View... views){
-        FadeInAnimator fadeInAnimator = new FadeInAnimator();
-        animateIn(  (View v)->{
-            v.clearAnimation();
-            fadeInAnimator.prepare(v);
-            if (duration != 0) fadeInAnimator.setDuration(duration);
-            fadeInAnimator.animate();
-            v.setVisibility(View.VISIBLE);
-        }, views);
+    public static void rotate(View viewToAnimate, boolean isRotated){
+        TransitionManager.beginDelayedTransition((ViewGroup) viewToAnimate.getParent() , new Rotate());
+        viewToAnimate.setRotation(isRotated ? 135 : 0);
+    }
 
+    public static void showViews(@Nullable Animation animation,View... views){
+        for (View v : views){
+            if(animation != null) {
+                v.startAnimation(animation);
+            }
+            v.setClickable(true);
+            v.setVisibility(View.VISIBLE);
+        }
+    }
+
+    // methods for android view animation library ;
+
+    public static void rollOut(int duration , View... views){ setOutAnimation( new RollOutAnimator() , duration , views); }
+
+    public static void rollIn(int duration , View... views){setOutAnimation(new RollInAnimator(), duration , views);}
+
+    public static void slideOutLeft(int duration , View... views){ setOutAnimation( new SlideOutLeftAnimator(), duration , views);}
+
+    public static void slideInLeft(int duration, View... views  ){ setInAnimation( new SlideInLeftAnimator() , duration , views);}
+
+    public static void slideOutRight(int duration, View... views  ){ setOutAnimation( new SlideOutRightAnimator() , duration , views);}
+
+    public static void slideInRight(int duration, View... views  ){ setInAnimation( new SlideInRightAnimator() , duration , views);}
+
+    public static void slideInUp(int duration, View... views  ){ setInAnimation( new SlideInUpAnimator() , duration , views);}
+
+    public static void slideOutUp(int duration, View... views  ){ setInAnimation( new SlideOutUpAnimator() , duration , views);}
+
+    public static void slideInDown(int duration, View... views  ){ setInAnimation( new SlideInDownAnimator() , duration , views);}
+
+    public static void slideOutDown(int duration, View... views  ){ setInAnimation( new SlideOutDownAnimator() , duration , views);}
+
+    public static void zoomIn(int duration, View... views  ){ setInAnimation( new ZoomInAnimator() , duration , views);}
+
+    public static void zoomOut(int duration, View... views  ){ setOutAnimation( new ZoomOutUpAnimator() , duration , views);}
+
+    public static void fadeInDown(int duration, View... views){ setInAnimation(new FadeInDownAnimator(), duration, views);}
+
+    public static void fadeOutDown(int duration, View... views  ){ setOutAnimation(new FadeOutDownAnimator(), duration ,    views);}
+
+    public static void fadeInUp(int duration , View... views) { setInAnimation( new FadeInUpAnimator() , duration , views);}
+
+    public static void fadeOutUp(int duratoin , View... views) { setOutAnimation( new FadeOutUpAnimator() , duratoin , views);}
+
+    public static void fadeOut(int duration, View... views){ setOutAnimation(  new FadeOutAnimator() , duration , views ); }
+
+    public static void fadeIn(int duration, View... views){ setInAnimation( new FadeInAnimator() , duration , views ); }
+
+    private static void setInAnimation( BaseViewAnimator animator, int duration , View... views){
+        if(duration != 0 ) animator.setDuration(duration);
+        for(View v : views){
+            v.clearAnimation();
+            animator.prepare(v);
+            v.setVisibility(View.VISIBLE);
+            animator.animate();
+        }
+    }
+
+    private static void setOutAnimation( BaseViewAnimator animator, int duration , View... views ){
+        if(duration != 0 ) animator.setDuration(duration);
+        for(View v : views){
+            v.clearAnimation();
+            animator.prepare(v);
+            animator.animate();
+        }
     }
 
     // keep views means setting to invisibile so that view can be animated back in, but it still takes space
     public static AnimatorListenerAdapter onOutAnimationEnd(boolean keepViews, View... views){
-            return new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    if(!keepViews) {
-                        for (View v : views) {
-                            v.setVisibility(View.GONE);
-                        }
+        return new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                if(!keepViews) {
+                    for (View v : views) {
+                        v.setVisibility(View.GONE);
                     }
                 }
+            }
 
-                @Override
-                public void onAnimationCancel(Animator animation) {
-                    super.onAnimationCancel(animation);
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                super.onAnimationCancel(animation);
 
-                }
-            };
+            }
+        };
     }
 
     public static AnimatorListenerAdapter onInAnimationEnd( View... views){
@@ -271,16 +194,6 @@ public class MAnimator {
         };
     }
 
-
-    public static void animateIn(InAnimation inAnimation    , View... views){
-        for (View v : views){
-                inAnimation.animateIn(v);
-        }
-    }
-
-    interface InAnimation{
-        void animateIn(View v );
-    }
 
 // end methods for android view animation library
 }
