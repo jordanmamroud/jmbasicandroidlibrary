@@ -25,50 +25,38 @@ public class MListFragment extends Fragment {
 
     private RecyclerView list;
     private MOnItemSelected.OnItemClickListener onItemClickListener;
-
-    private int layoutResource = 0;
-    private int recyclerViewId ;
-
     private MListAdapter adapter ;
+    private LinearLayoutManager manager ;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // this is for customizing layout resource
-        if(layoutResource == 0){
-            layoutResource= R.layout.fragment_list;
-        }
-        View view = inflater.inflate(layoutResource, container, false);
-        instantiateView(view);
-        setupCallbacks();
-        return view;
-    }
     // must be called first
     public void setAdapter( MListAdapter adapter){
          this.adapter = adapter ;
     }
 
-    public void setupCallbacks(){
-        list.addOnItemTouchListener(
-                new MOnItemSelected( getContext() , this :: onItemSelected  ));
+    // pass in recyclerview
+    public void instantiateView(RecyclerView mRecyclerView){
+        this.list = mRecyclerView ;
+        list.addOnItemTouchListener(new MOnItemSelected( getContext() , this :: onItemSelected  ));
     }
+
 
     public void setupLayout(){
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(  getContext()  );
-        list.setLayoutManager(linearLayoutManager);
+        if(manager == null) manager = new LinearLayoutManager(  getContext()  );
+        list.setLayoutManager(manager);
         list.setAdapter(adapter);
-    }
-
-    public void instantiateView(View view){
-        list = (RecyclerView) view.findViewById(R.id.mListview);
     }
 
     public void onItemSelected(View v , int position){
 
     }
 
-    public void setContentView(int layoutResource, int recyclerViewId){
-        this.layoutResource = layoutResource ;
-        this.recyclerViewId = recyclerViewId ;
+
+    public LinearLayoutManager getManager() {
+        return manager;
+    }
+
+    public void setManager(LinearLayoutManager manager) {
+        this.manager = manager;
     }
 
 }

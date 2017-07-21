@@ -20,6 +20,7 @@ import com.example.jordan.basicslibrary.Utilities.Utils.ViewHelper;
 
 import java.util.ArrayList;
 
+import GlideHelper.GlideManager;
 import fragments.IAdapterDelegates;
 
 /**
@@ -31,11 +32,16 @@ public class GridViewDelegate implements IAdapterDelegates {
     private Context mContext;
     private int availableImagesCount = 0;
     private boolean lockEnabled = false;
-
+    private GlideManager glideManager;
 
     public GridViewDelegate(Context mContext) {
         this.mContext = mContext;
         lockEnabled = false ;
+    }
+
+    public GridViewDelegate(Context mContext, GlideManager glideManager) {
+        this.mContext = mContext;
+        this.glideManager = glideManager;
     }
 
     // this constructor is used for locking feature, if not used lock feature must be set
@@ -49,19 +55,13 @@ public class GridViewDelegate implements IAdapterDelegates {
     public void onBindViewHolder(ArrayList itemsList, RecyclerView.ViewHolder holder, int position) {
         GridViewHolder mHolder = (GridViewHolder) holder ;
 
-        // sets up smooth image caching and loading checking that item has a image from resource.
-        if (itemsList.get( position) instanceof IDrawableImage) {
+        // sets up smooth image caching and loading checking that item has a image .
+        if (    itemsList.get( position) instanceof IDrawableImage  ) {
 
             String imgLocation = ((IDrawableImage) itemsList.get(position)).getDrawableName();
-
             int imageId = mContext.getResources().getIdentifier(imgLocation, "drawable", mContext.getPackageName());
 
-            Glide.with(mContext).load(imageId)
-                    .asBitmap()
-                    .dontAnimate()
-                    .override(100,100)
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .into( mHolder.thumbnail);
+            setGridImage(   imageId , mHolder.thumbnail    );
 
             // hiding all lock views prior to showing available ones if lock view is enabled .
             if (lockEnabled) {
@@ -71,7 +71,14 @@ public class GridViewDelegate implements IAdapterDelegates {
             if (position >= availableImagesCount && lockEnabled && availableImagesCount > -1) {
                 mHolder.enableLock();
             }
+        }
+    }
 
+    public void setGridImage(Object image, ImageView imageView){
+        if(glideManager == null){
+            GlideManager.setDefaultGlideImage(mContext , image, false ,imageView , false );
+        }else {
+            glideManager.setGlideImage( image, imageView   );
         }
     }
 
@@ -85,7 +92,6 @@ public class GridViewDelegate implements IAdapterDelegates {
 
     @Override
     public void update(Object o) {
-        System.out.println("being updated");
         // show all images if they are locked , or if new num of available images is passed int as object set it as that ;
         if(o != null  && o instanceof Integer ){
             availableImagesCount = (int) o  ;

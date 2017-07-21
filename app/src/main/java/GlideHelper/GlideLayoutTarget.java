@@ -18,16 +18,15 @@ public class GlideLayoutTarget extends ViewGroupTarget  {
     private boolean isFromResource = true;
 
 
-    public GlideLayoutTarget(Context context, LinearLayout linearLayout) {
+    public GlideLayoutTarget(Context context, ViewGroup layout) {
 
-        super(linearLayout);
+        super(layout);
 
         this.context = context;
     }
 
-    public GlideLayoutTarget(Context context, ViewGroup linearLayout, boolean isfromResource) {
-        super(linearLayout);
-
+    public GlideLayoutTarget(Context context, ViewGroup layout, boolean isfromResource) {
+        super(layout);
         this.context = context;
         this.isFromResource = isfromResource ;
     }

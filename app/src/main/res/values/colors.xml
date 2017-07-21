@@ -8,5 +8,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-
+    <!-- control progressbar -->
+    <color name="pbProgressColor">@color/colorAccent</color>
+    <color name="pbEmptyColor">#fff</color>
+    <color name="pbTextColor">#000</color>
 </resources>

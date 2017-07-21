@@ -197,7 +197,6 @@ public class MAnimator {
             if(v.getVisibility() == View.VISIBLE){
                 fadeOutDown(0, true, v );
             }else {
-                System.out.println("fade up");
                 fadeInUp(0, v);
             }
         }

@@ -55,8 +55,8 @@ public class ListPagerFragment extends Fragment {
     // this needs work not happy with this solution but will continue working on it does  job for now
     public void setPagerItem(){
         // do not like this approach
-        mViewPager.postDelayed(
-                ()-> mViewPager.setCurrentItem(getCurrentPosition(), true) , 10 );
+//        mViewPager.postDelayed(
+//                ()-> mViewPager.setCurrentItem(getCurrentPosition(), true) , 10 );
     }
 
     // must be called first .

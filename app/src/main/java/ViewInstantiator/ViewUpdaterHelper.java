@@ -5,11 +5,7 @@ import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 
-import Events.CommonEvents;
-import ViewInstantiator.PIabResult;
-import ViewInstantiator.PInventory;
-import ViewInstantiator.PPurchases;
-import ViewInstantiator.ViewInstantiatorHelper;
+import mevents.CommonEvents;
 
 /**
  * Created by Jordan on 7/17/2017.

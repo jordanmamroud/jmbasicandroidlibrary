@@ -1,4 +1,4 @@
-package Events;
+package mevents;
 
 /**
  * Created by Jordan on 7/17/2017.
@@ -57,6 +57,35 @@ public class CommonEvents {
 
         public int getClickedPosition(){
             return clickedPosition;
+        }
+    }
+
+    public static class UpdateAppbar {
+        String mainTxt ;
+        String fragId ;
+
+        public UpdateAppbar(String fragId) {
+            this.fragId = fragId;
+        }
+
+        public String getFragId() {
+            return fragId;
+        }
+
+        public void setFragId(String fragId) {
+            this.fragId = fragId;
+        }
+
+        public UpdateAppbar(String fragId , String mainTxt) {
+            this.mainTxt = mainTxt;
+        }
+
+        public String getMainTxt() {
+            return mainTxt;
+        }
+
+        public void setMainTxt(String mainTxt) {
+            this.mainTxt = mainTxt;
         }
     }
 
