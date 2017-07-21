@@ -26,7 +26,7 @@ public class MListFragment extends Fragment {
     private RecyclerView list;
     private MOnItemSelected.OnItemClickListener onItemClickListener;
     private MListAdapter adapter ;
-    private LinearLayoutManager manager ;
+
 
     // must be called first
     public void setAdapter( MListAdapter adapter){
@@ -34,29 +34,20 @@ public class MListFragment extends Fragment {
     }
 
     // pass in recyclerview
-    public void instantiateView(RecyclerView mRecyclerView){
+    public void setupRecyclerview(RecyclerView mRecyclerView){
         this.list = mRecyclerView ;
         list.addOnItemTouchListener(new MOnItemSelected( getContext() , this :: onItemSelected  ));
+        list.setLayoutManager(getLayoutManager() );
+        list.setAdapter(adapter);
     }
 
-
-    public void setupLayout(){
-        if(manager == null) manager = new LinearLayoutManager(  getContext()  );
-        list.setLayoutManager(manager);
-        list.setAdapter(adapter);
+    public LinearLayoutManager getLayoutManager(){
+        return new LinearLayoutManager(getContext());
     }
 
     public void onItemSelected(View v , int position){
 
     }
 
-
-    public LinearLayoutManager getManager() {
-        return manager;
-    }
-
-    public void setManager(LinearLayoutManager manager) {
-        this.manager = manager;
-    }
 
 }
