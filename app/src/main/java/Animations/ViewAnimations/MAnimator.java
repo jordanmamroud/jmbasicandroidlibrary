@@ -14,7 +14,7 @@ import com.transitionseverywhere.Rotate;
 import com.transitionseverywhere.TransitionManager;
 
 
-import Animations.AnimationManager;
+import Animations.AnimationBuilder;
 import Animations.avm.BaseViewAnimator;
 import Animations.avm.fading_entrances.FadeInUpAnimator;
 import Animations.avm.fading_exits.FadeOutDownAnimator;
@@ -26,8 +26,8 @@ import Animations.avm.fading_exits.FadeOutDownAnimator;
 
 public class MAnimator {
 
-    public static AnimationManager createAnimation(BaseViewAnimator animationType ){
-        return  new AnimationManager(animationType);
+    public static AnimationBuilder createAnimation(BaseViewAnimator animationType ){
+        return  new AnimationBuilder(animationType);
     }
 
     public static void startAnimation(Context context , View viewToAnimate, int animationId ){

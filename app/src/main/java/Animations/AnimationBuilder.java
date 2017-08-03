@@ -4,15 +4,13 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.view.View;
 
-import com.example.jordan.basicslibrary.Utilities.Utils.ViewHelper;
-
 import Animations.avm.BaseViewAnimator;
 
 /**
  * Created by Jordan on 7/29/2017.
  */
 // key methods are animateIn() and animateOut()
-public class AnimationManager {
+public class AnimationBuilder {
 
     BaseViewAnimator animator;
     View[] viewsToAnimate ;
@@ -21,7 +19,7 @@ public class AnimationManager {
     int duration = 0 ;
     boolean isInAnimation ;
 
-    public AnimationManager(BaseViewAnimator animator) { this.animator = animator; }
+    public AnimationBuilder(BaseViewAnimator animator) { this.animator = animator; }
 
     public void animateIn(){         animate( true  );           }
 
@@ -93,22 +91,22 @@ public class AnimationManager {
 
     // getters / setters
 
-    public AnimationManager dontKeepViewsInLayout() {
+    public AnimationBuilder dontKeepViewsInLayout() {
         this.keepViewsInLayout = false;
         return this;
     }
 
-    public AnimationManager setViewsToAnimate(View... viewsToAnimate) {
+    public AnimationBuilder setViewsToAnimate(View... viewsToAnimate) {
         this.viewsToAnimate = viewsToAnimate;
         return this;
     }
 
-    public AnimationManager setEventListener(AnimatorListenerAdapter eventListener) {
+    public AnimationBuilder setEventListener(AnimatorListenerAdapter eventListener) {
         this.eventListener = eventListener;
         return this ;
     }
 
-    public AnimationManager setDuration(int duration) {
+    public AnimationBuilder setDuration(int duration) {
         this.duration = duration;
         return  this ;
     }
