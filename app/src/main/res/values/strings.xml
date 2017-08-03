@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">BasicsLibrary</string>
+
+    <!-- text for locked button in cv_locked -->
+    <string name="lockedViewBtnTxt">Upgrade</string>
+
 </resources>

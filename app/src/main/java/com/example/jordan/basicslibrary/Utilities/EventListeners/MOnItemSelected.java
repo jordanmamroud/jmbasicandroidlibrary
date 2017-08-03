@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 
 /**
  * Created by Jordan on 5/4/2017.
@@ -40,6 +41,23 @@ public class MOnItemSelected implements RecyclerView.OnItemTouchListener {
         });
     }
 
+    public static AdapterView.OnItemSelectedListener mOnItemSelected(    OnItemClickListener onItemClickListener ) {
+        return new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                onItemClickListener.onItemClick(view, position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+
+            }
+        };
+    };
+
     @Override
     public boolean onInterceptTouchEvent(RecyclerView view, MotionEvent e) {
         View childView = view.findChildViewUnder(e.getX(), e.getY());
@@ -51,6 +69,7 @@ public class MOnItemSelected implements RecyclerView.OnItemTouchListener {
         }
         return false;
     }
+
 
     @Override
     public void onTouchEvent(RecyclerView view, MotionEvent motionEvent) {}
@@ -65,4 +84,6 @@ public class MOnItemSelected implements RecyclerView.OnItemTouchListener {
     public interface OnItemLongClickListener{
         void onItemLongClick(int position);
     }
+
+
 }

@@ -2,4 +2,12 @@
 <resources>
     <dimen name="defaultCornerRadius">10dp</dimen>
     <dimen name="defaultElevation">10dp</dimen>
+
+    <dimen name="appbarHeight">50dp</dimen>
+
+    <dimen name="mSmallText">12dp</dimen>
+    <dimen name="mMediumText">18dp</dimen>
+    <dimen name="mLargeText">30dp</dimen>
+
+    <dimen name="titleText">30dp</dimen>
 </resources>

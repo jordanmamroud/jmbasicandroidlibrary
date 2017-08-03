@@ -18,18 +18,12 @@ package Animations.ViewPagerAnimations;
 
 import android.view.View;
 
-public class CubeOutTransformer extends BaseTransformer {
+public class AccordionTransformer extends BaseTransformer {
 
 	@Override
 	protected void onTransform(View view, float position) {
-		view.setPivotX(position < 0f ? view.getWidth() : 0f);
-		view.setPivotY(view.getHeight() * 0.5f);
-		view.setRotationY(90f * position);
-	}
-
-	@Override
-	public boolean isPagingEnabled() {
-		return true;
+		view.setPivotX(position < 0 ? 0 : view.getWidth());
+		view.setScaleX(position < 0 ? 1f + position : 1f - position);
 	}
 
 }

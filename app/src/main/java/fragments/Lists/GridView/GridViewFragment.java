@@ -15,53 +15,36 @@ import com.example.jordan.basicslibrary.R;
 import com.example.jordan.basicslibrary.Utilities.EventListeners.MOnItemSelected;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
+import fragments.BaseFragment;
 import fragments.IAdapterDelegates;
 
-public class GridViewFragment extends Fragment {
+public abstract class GridViewFragment extends BaseFragment{
 
-    private String OUTSTATE_KEY_NUMIMAGES = "numOfAvailableImages" ;
     private RecyclerView mRecyclerView;
-    private ArrayList items = new ArrayList<>();
     private GridViewAdapter gridViewAdapter ;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(  R.layout.fragment_grid_view   , container , false   );
-        instantiateView(v);
-        setupCallbacks();
-        return v    ;
+    public void setupGridView(RecyclerView recyclerView , int itemsPerRow){
+        this.mRecyclerView = recyclerView ;
+        mRecyclerView.addOnItemTouchListener(new MOnItemSelected(   getContext()    , this :: onItemClicked     ));
+        setupRecyclerView(  itemsPerRow   );
     }
 
-    public void instantiateView(View v){
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.imagesGrid);
-    }
-
-    public void setupCallbacks(){
-        mRecyclerView.addOnItemTouchListener(
-                new MOnItemSelected(getContext(), this :: onItemClicked     ));
-    }
-
-    public void setupLayout(int itemsOnLine){
+    private void setupRecyclerView(int itemsOnLine){
         RecyclerView.LayoutManager manager = new GridLayoutManager(getContext(), itemsOnLine);
+        gridViewAdapter = initAdapter() ;
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(gridViewAdapter);
-    }
+     }
 
-    // must be called before setuplayout or adapter will be null unles setAdapter was called.
-    public void setGridViewAdapter(GridViewAdapter adapter){
-        this.gridViewAdapter = adapter;
-    }
+    public abstract GridViewAdapter initAdapter();
 
-    public void onItemClicked(View v , int pos){
+    public abstract void onItemClicked(View v , int pos);
 
-    }
-
-    public GridViewAdapter getAdapter(){
-        return gridViewAdapter ;
-    }
-
-    public void update(Object o ){
+    @Override
+    public void update(Observable o, Object arg) {
         if(gridViewAdapter !=null) {
             gridViewAdapter.updateDelegate(o);
         }
@@ -71,5 +54,13 @@ public class GridViewFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
     }
+
+    public RecyclerView getRecyclerView(){
+        return mRecyclerView;
+    }
+
+    public GridViewAdapter getGridViewAdapter(){return gridViewAdapter; }
+
+    public int getCount(){ return gridViewAdapter.getItemCount();   }
 
 }

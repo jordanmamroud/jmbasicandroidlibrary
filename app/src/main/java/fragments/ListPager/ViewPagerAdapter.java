@@ -1,6 +1,5 @@
 package fragments.ListPager;
 
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -13,50 +12,34 @@ import java.util.Observer;
  * Created by Jordan on 5/11/2017.
  */
 
-public class ListPagerAdapter extends FragmentStatePagerAdapter{
-
+public class ViewPagerAdapter extends FragmentStatePagerAdapter{
 
     private List data;
-    private IPagerItemFragment fragment;
-    private int screenLimit ;
+    private ViewPagerItemFragment fragment;
+    private FragmentManager fm ;
 
-    public ListPagerAdapter(FragmentManager fm){
+    public ViewPagerAdapter(FragmentManager fm){
         super(fm);
-        this.data = data;
-        this.fragment = fragment;
+        this.fm = fm;
     }
 
-    public ListPagerAdapter(FragmentManager fm, ArrayList data, IPagerItemFragment fragment){
+    public ViewPagerAdapter(FragmentManager fm, ArrayList data, ViewPagerItemFragment fragment){
         super(fm);
+        this.fm = fm;
         this.data = data;
         this.fragment = fragment;
-    }
-
-    public void setList(){
-        this.data = data ;
-    };
-
-    public void setPagerFragmentType(IPagerItemFragment iPagerItemFragment){
-        this.fragment = iPagerItemFragment ;
     }
 
     @Override
     public Fragment getItem(int position) {
-        Fragment currentFrag =  fragment.newInstance(data.get(position) , position);
-        return   currentFrag;
+
+            return fragment.initNewInstance(data.get(position), position);
     }
 
     @Override
     public int getCount() {
         return data.size();
     }
-
-    // returning null on save state could help with fragments performance also prevents trying to find a null fragment( i think check again later   )
-    @Override
-    public Parcelable saveState() {
-        return null ;
-    }
-
 
     // get item position is run when notify data set changed is called so overriding it here will force call to fragments update method if implimenting .
     @Override
@@ -68,5 +51,11 @@ public class ListPagerAdapter extends FragmentStatePagerAdapter{
 
         return super.getItemPosition(object);
     }
+
+    // roverriding save state will fuck up whole pager do not do this ...
+//    @Override
+//    public Parcelable saveState() {
+//        return super.saveState() ;
+//    }
 
 }

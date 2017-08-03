@@ -1,16 +1,36 @@
 package com.example.jordan.basicslibrary.Utilities.Utils;
 
+import android.content.Context;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 /**
  * Created by Jordan on 7/7/2017.
  */
 
 public class ViewHelper {
+
+
+    public static void showMessage(Context context, String message, int length){
+        Toast.makeText(context , message , length).show();
+    }
+    public static void showToastAtCustomPosition(Context context, String msg, int toastLength , int gravity){
+        Toast toast = Toast.makeText(context, msg, toastLength);
+        toast.setGravity(gravity, 0 , 0 );
+        toast.show();
+    }
+
+    public static void setViewsClickability(boolean clickable, View... views){
+        for(View v : views){
+            v.setClickable(clickable);
+        }
+    }
 
     public static boolean isViewVisible(View view){
         if(view.getVisibility() == View.VISIBLE){
@@ -20,22 +40,20 @@ public class ViewHelper {
         }
     }
 
-    public static void hideViews(@Nullable Animation animation, View... views){
-        for (View v : views){
-            if(animation != null) {
-                v.startAnimation(animation);
-                v.setVisibility(View.INVISIBLE);
-            }else {
-                v.setVisibility(View.GONE);
-            }
+    public static void removeViews(  View... views){
+        for (View v : views)    {
+            v.setVisibility(View.GONE);
+            v.setClickable(false);
         }
     }
 
-    public static void showViews(@Nullable Animation animation,View... views){
+    public static void hideViews(View... views){
+        for (View v : views) v.setVisibility(View.INVISIBLE);
+    }
+
+    public static void showViews( View... views){
         for (View v : views){
-            if(animation != null) {
-                v.startAnimation(animation);
-            }
+
             v.setClickable(true);
             v.setVisibility(View.VISIBLE);
         }
@@ -45,6 +63,12 @@ public class ViewHelper {
         return (totalAvailableWidth/ numOfViews)   - marginRightPlusLeft ;
     }
 
+    // call getToken on view to get windowtoken
+    public static void hideKeyboard(Context context , IBinder windowToken){
+        InputMethodManager mgr = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        mgr.hideSoftInputFromWindow( windowToken , 0);
+
+    }
 
 }
 //

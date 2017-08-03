@@ -37,27 +37,48 @@ public class CommonEvents {
         }
     }
 
-    public static class FragmentChange{
-        private String currentFrag ;
+    public static class FragmentChangeRequest {
+        private String fragmentToLaunch ;
         // only used for items clicked in lists
-        private int clickedPosition;
+        private Object extraInfo;
 
-        public FragmentChange(String currentFrag) {
-            this.currentFrag = currentFrag;
+        public FragmentChangeRequest() { }
+
+        public FragmentChangeRequest setFragmentToLaunchId(String currentFrag) {
+            this.fragmentToLaunch = currentFrag;
+            return this;
         }
 
-        public FragmentChange(String currentFrag, int clickedPosition) {
-            this.currentFrag = currentFrag;
-            this.clickedPosition = clickedPosition;
+        public FragmentChangeRequest setExtraInfo(Object extraInfo){
+            this.extraInfo = extraInfo ;
+            return this ;
         }
 
-        public String getCurrentFrag(){
-            return currentFrag;
+        public String getFragmentToLaunchId(){
+            return fragmentToLaunch;
         }
 
-        public int getClickedPosition(){
-            return clickedPosition;
+        public Object getExtraInfo(){
+            return extraInfo;
         }
+    }
+
+    public static class FragmentOpened {
+        private String newFragId ;
+        private Object info ;
+
+        public FragmentOpened(String newFragId, Object info) {
+            this.newFragId = newFragId;
+            this.info = info;
+        }
+
+        public String getNewFragId() {return newFragId;}
+
+        public void setNewFragId(String newFragId) {this.newFragId = newFragId;}
+
+        public Object getInfo() { return info; }
+
+        public void setInfo(Object info) { this.info = info;}
     }
 
     public static class UpdateAppbar {

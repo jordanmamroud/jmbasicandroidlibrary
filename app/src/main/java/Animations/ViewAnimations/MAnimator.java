@@ -4,42 +4,20 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.animation.FastOutLinearInInterpolator;
-import android.support.v4.view.animation.LinearOutSlowInInterpolator;
-import android.transition.Slide;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.Transformation;
-
 
 
 import com.transitionseverywhere.Rotate;
 import com.transitionseverywhere.TransitionManager;
 
 
+import Animations.AnimationManager;
 import Animations.avm.BaseViewAnimator;
-import Animations.avm.fading_entrances.FadeInAnimator;
-import Animations.avm.fading_entrances.FadeInDownAnimator;
 import Animations.avm.fading_entrances.FadeInUpAnimator;
-import Animations.avm.fading_exits.FadeOutAnimator;
 import Animations.avm.fading_exits.FadeOutDownAnimator;
-import Animations.avm.fading_exits.FadeOutUpAnimator;
-import Animations.avm.sliders.SlideInDownAnimator;
-import Animations.avm.sliders.SlideInLeftAnimator;
-import Animations.avm.sliders.SlideInRightAnimator;
-import Animations.avm.sliders.SlideInUpAnimator;
-import Animations.avm.sliders.SlideOutDownAnimator;
-import Animations.avm.sliders.SlideOutLeftAnimator;
-import Animations.avm.sliders.SlideOutRightAnimator;
-import Animations.avm.sliders.SlideOutUpAnimator;
-import Animations.avm.specials.RollInAnimator;
-import Animations.avm.specials.RollOutAnimator;
-import Animations.avm.zooming_entrances.ZoomInAnimator;
-import Animations.avm.zooming_exits.ZoomOutUpAnimator;
 
 
 /**
@@ -47,6 +25,10 @@ import Animations.avm.zooming_exits.ZoomOutUpAnimator;
  */
 
 public class MAnimator {
+
+    public static AnimationManager createAnimation(BaseViewAnimator animationType ){
+        return  new AnimationManager(animationType);
+    }
 
     public static void startAnimation(Context context , View viewToAnimate, int animationId ){
          Animation rotation = AnimationUtils.loadAnimation(context, animationId );
@@ -91,55 +73,24 @@ public class MAnimator {
 
     // methods for android view animation library ;
 
-    public static void rollOut(int duration , boolean keepViews,View... views){ setOutAnimation( new RollOutAnimator() , duration ,keepViews, views); }
-
-    public static void rollIn(int duration , View... views){setInAnimation(new RollInAnimator(), duration , views);}
-
-    public static void slideOutLeft(int duration ,boolean keepViews, View... views){ setOutAnimation( new SlideOutLeftAnimator(), duration ,keepViews, views);}
-
-    public static void slideInLeft(int duration, View... views  ){ setInAnimation( new SlideInLeftAnimator() , duration , views);}
-
-    public static void slideOutRight(int duration, boolean keepViews,View... views  ){ setOutAnimation( new SlideOutRightAnimator() , duration ,keepViews, views);}
-
-    public static void slideInRight(int duration, View... views  ){ setInAnimation( new SlideInRightAnimator() , duration , views);}
-
-    public static void slideOutUp(int duration,boolean keepViews, View... views  ){ setOutAnimation( new SlideOutUpAnimator() , duration ,keepViews, views);}
-
-    public static void slideInUp(int duration, View... views  ){ setInAnimation( new SlideInUpAnimator() , duration , views);}
-
-    public static void slideOutDown(int duration,boolean keepViews, View... views  ){ setOutAnimation( new SlideOutDownAnimator() , duration , keepViews,views);}
-
-    public static void slideInDown(int duration, View... views  ){ setInAnimation( new SlideInDownAnimator() , duration , views);}
-
-    public static void zoomIn(int duration, View... views  ){ setInAnimation( new ZoomInAnimator() , duration , views);}
-
-    public static void zoomOut(int duration, boolean keepViews,View... views  ){ setOutAnimation( new ZoomOutUpAnimator() , duration ,keepViews, views);}
-
-    public static void fadeInDown(int duration, View... views){ setInAnimation(new FadeInDownAnimator(), duration, views);}
-
     public static void fadeOutDown(int duration, boolean keepViews,View... views  ){ setOutAnimation(new FadeOutDownAnimator(), duration , keepViews,   views);}
 
     public static void fadeInUp(int duration ,  View... views) { setInAnimation( new FadeInUpAnimator() , duration , views);}
 
-    public static void fadeOutUp(int duration ,boolean keepViews, View... views) { setOutAnimation( new FadeOutUpAnimator() , duration ,keepViews, views);}
 
-    public static void fadeIn(int duration ,View... views){ setInAnimation( new FadeInAnimator() , duration , views ); }
-
-    public static void fadeOut(int duration, boolean keepViews, View... views){ setOutAnimation(  new FadeOutAnimator() , duration ,keepViews, views ); }
-
-    private static void setInAnimation( BaseViewAnimator animator, int duration , View... views){
+    public static void setInAnimation( BaseViewAnimator animator, int duration , View... views){
         if(duration != 0 ) animator.setDuration(duration);
+        animator.addAnimatorListener( inAnimationEvents(views) );
         for(View v : views){
-            v.setClickable(true);
             animator.prepare(v);
             v.setVisibility(View.VISIBLE);
             animator.animate();
         }
     }
 
-    private static void setOutAnimation( BaseViewAnimator animator, int duration , boolean keepViews, View... views ){
+    public static void setOutAnimation( BaseViewAnimator animator, int duration , boolean keepViews, View... views ){
         if(duration != 0 ) animator.setDuration(duration);
-        animator.addAnimatorListener( onOutAnimationEnd(true, views));
+        animator.addAnimatorListener( outAnimationEvents(true, views));
         for(View v : views){
             v.setClickable(false);
             animator.prepare(v);
@@ -148,7 +99,7 @@ public class MAnimator {
     }
 
     // keep views means setting to invisibile so that view can be animated back in, but it still takes space
-    public static AnimatorListenerAdapter onOutAnimationEnd(boolean keepViews, View... views){
+    public static AnimatorListenerAdapter outAnimationEvents(boolean keepViews, View... views){
         return new AnimatorListenerAdapter() {
             boolean cancelled ;
             @Override
@@ -170,12 +121,15 @@ public class MAnimator {
         };
     }
 
-    public static AnimatorListenerAdapter onInAnimationEnd( View... views){
+    public static AnimatorListenerAdapter inAnimationEvents( View... views){
         return new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
+                System.out.println("clickable huh");
                 for (View v : views) {
+                    System.out.println("clickable again");
+                    v.setClickable(true);
                     v.setVisibility(View.VISIBLE);
                 }
             }
@@ -183,7 +137,10 @@ public class MAnimator {
             @Override
             public void onAnimationCancel(Animator animation) {
                 super.onAnimationCancel(animation);
-
+                for (View v : views) {
+                    v.setClickable(true);
+                    v.setVisibility(View.VISIBLE);
+                }
             }
         };
     }

@@ -18,18 +18,23 @@ package Animations.ViewPagerAnimations;
 
 import android.view.View;
 
-public class CubeOutTransformer extends BaseTransformer {
+public class ForegroundToBackgroundTransformer extends BaseTransformer {
 
 	@Override
 	protected void onTransform(View view, float position) {
-		view.setPivotX(position < 0f ? view.getWidth() : 0f);
-		view.setPivotY(view.getHeight() * 0.5f);
-		view.setRotationY(90f * position);
-	}
+		final float height = view.getHeight();
+		final float width = view.getWidth();
+		final float scale = min(position > 0 ? 1f : Math.abs(1f + position), 0.5f);
 
-	@Override
-	public boolean isPagingEnabled() {
-		return true;
+		view.setScaleX(scale);
+		view.setScaleY(scale);
+		view.setPivotX(width * 0.5f);
+		view.setPivotY(height * 0.5f);
+		view.setTranslationX(position > 0 ? width * position : -width * position * 0.25f);
 	}
+//idk whats wrong
+//	private static final float min(float val, float min) {
+//		return val < min ? min : val;
+//	}
 
 }

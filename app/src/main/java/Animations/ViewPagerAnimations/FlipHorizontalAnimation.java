@@ -10,6 +10,7 @@ public class FlipHorizontalAnimation extends BaseTransformer {
 
     @Override
     protected void onTransform(View view, float position) {
+
         final float rotation = 180f * position;
 
         view.setVisibility(rotation > 90f || rotation < -90f ? View.INVISIBLE : View.VISIBLE);

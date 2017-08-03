@@ -1,23 +1,15 @@
 package GlideHelper;
 
 import android.content.Context;
-import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.view.View;
-import android.view.animation.Animation;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
-import com.bumptech.glide.BitmapRequestBuilder;
 import com.bumptech.glide.BitmapTypeRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.animation.GlideAnimationFactory;
 import com.bumptech.glide.request.animation.ViewPropertyAnimation;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.bumptech.glide.request.target.SizeReadyCallback;
-import com.bumptech.glide.request.target.Target;
 
 /**
  * Created by Jordan on 7/19/2017.
@@ -31,7 +23,7 @@ public class GlideManager {
 
     Context mContext;
 
-    // default values for these properties ;
+    // default values for these properties , once they are set all scaled down images will be based on these properties ;
     private int imagePxHeight = 0;
 
     private int imagePxWidth  = 0 ;
@@ -42,11 +34,16 @@ public class GlideManager {
 
     private boolean cache = true ;
 
-    private boolean animate = true ;
+    private boolean animate = false ;
 
     private DiskCacheStrategy cacheStrategy = DiskCacheStrategy.RESULT ;
 
     private ViewPropertyAnimation.Animator customAnimation = null   ;
+
+    // if this is set to true pre draw listener will set the image px height and width so that layout listener is not called again
+    private boolean measureOnlyOnce = false;
+
+    Drawable placeholder = null;
 
     public GlideManager(Context mContext) {
         this.mContext = mContext;
@@ -63,123 +60,125 @@ public class GlideManager {
         this.imagePxWidth = imagePxWidth;
     }
 
-    public static void setDefaultGlideImage(Context context , Object image, boolean cache, ImageView view, boolean animate){
-        BitmapTypeRequest imgFormation = Glide.with(context).load(  image   ).asBitmap();
-
-        if(!animate) imgFormation.dontAnimate();
-
-        imgFormation.skipMemoryCache(cache).diskCacheStrategy(DiskCacheStrategy.RESULT).into( view    );
-    }
-
-    public void setScaledDownImage(Object image , ImageView view, int downScale){
-        BitmapImageViewTarget bitmapImageViewTarget = new BitmapImageViewTarget(view);
-
-        // this sets a scales down the image size (in pixels) , waits for imageview size to come back then scaling down accordingly.
-        // glide checks if image height or width == 0 and if they do means view is not measured and it adds a layout listener and waits for views to be measures then runs
-        // size ready callback , dont need to know this but think it is cool.
-
-        SizeReadyCallback cb = (int viewWidth, int viewHeight)-> {
-            int widthToScale = imagePxWidth !=  0 ? imagePxWidth : viewWidth ;
-            int heightToScale = imagePxHeight != 0 ? imagePxHeight : viewHeight ;
-
-            //if downscale is not 0 or 1 scales it down
-            int scaledDownWidth = downScale != 0 && downScale!= NO_SCALE    ? widthToScale / downScale : widthToScale ;
-            int scaledDownHeight =  downScale != 0 && downScale!= NO_SCALE ? heightToScale / downScale : widthToScale ;
-
-            setImage(image , view , scaledDownWidth , scaledDownHeight);
-        };
-
-        bitmapImageViewTarget.getSize(cb);
-    }
-
     public void setGlideImage(Object image , ImageView view) {
-        if (scaleDownBy != NO_SCALE || scaleDownBy != 0) {
-            setScaledDownImage(image, view, scaleDownBy);
-        } else{
-            setImage(image, view, imagePxWidth, imagePxHeight);
+        if(image != null) {
+            if (    shouldMeasureViewInsteadOfGlide()   && !isViewAlreadyMeasured(view)  ) {
+                setImageAfterViewIsMeasured( image, view  );
+            } else {
+                setImageProperties(   image, view );
+            }
+        }else {
+            System.out.println("image given to glide manager was null");
         }
     }
+    // if scale down is set we should measure view ourselves instead of letting glides built in method for measuring do it
+    private boolean shouldMeasureViewInsteadOfGlide() { return scaleDownBy != NO_SCALE || scaleDownBy != 0;  }
 
+    private boolean isViewAlreadyMeasured(View view) { return view.getHeight() > 0 && view.getWidth() > 0 ||( imagePxWidth > 0 && imagePxHeight > 0 && measureOnlyOnce ); }
 
-    public void setImage(Object image , ImageView view, int width , int height){
-        BitmapTypeRequest imgFormation = Glide.with(mContext).load(  image   ).asBitmap();
-        if( width != 0 && height != 0){
-            imgFormation.override(width, height);
+    public  void setImageAfterViewIsMeasured(Object image , ImageView view  ){
+        view.getViewTreeObserver().addOnPreDrawListener( getPreDrawListener(    view , image    ) );
+    }
+
+    private ViewTreeObserver.OnPreDrawListener getPreDrawListener(ImageView view , Object image) {
+        return new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                view.getViewTreeObserver().removeOnPreDrawListener(this);
+                if (view.getHeight() != 0 && view.getWidth() != 0) {
+
+                    measureAndSetImageView(view, image);
+
+                    return true;
+                }
+                else return false;
+            }
         };
+    }
 
-        if(scaleType == CENTER_CROP){
-            imgFormation.centerCrop();
-        }else if (scaleType == FIT_CENTER){
-            imgFormation.fitCenter();
+    private void measureAndSetImageView(ImageView view, Object image ){
+        if (measureOnlyOnce) {
+            // will still run multiple times in grid views but will stop once showing images are done loading because gridviews use same layout listenr even if try to remove it
+            imagePxHeight = view.getHeight();
+            imagePxWidth = view.getWidth();
         }
+        setImageProperties(image  ,  view   );
+    }
 
-        if(!animate) imgFormation.dontAnimate() ;
+    private void setImageProperties(Object image , ImageView view){
+        BitmapTypeRequest imgFormation = Glide.with(mContext).load(  image   ).asBitmap() ;
+        setImageDimensions(view , imgFormation);
+
+        if(scaleType == CENTER_CROP) imgFormation.centerCrop();
+
+        else if (scaleType == FIT_CENTER)   imgFormation.fitCenter();
+
+        if(placeholder != null) imgFormation.placeholder(placeholder);
+
+        if(!animate ) imgFormation.dontAnimate() ;
 
         if(customAnimation != null && animate)  imgFormation.animate(customAnimation);
+
         imgFormation.skipMemoryCache(cache);
-        if(!cache){
-            imgFormation.diskCacheStrategy(DiskCacheStrategy.NONE);
-        }
-        else {
-            imgFormation.diskCacheStrategy(cacheStrategy);
-        }
+
+        if(!cache) imgFormation.diskCacheStrategy(DiskCacheStrategy.NONE);
+
+        else imgFormation.diskCacheStrategy(cacheStrategy);
+
         imgFormation.into( view    );
     }
 
-
-    public ViewPropertyAnimation.Animator getGlideAnimation() {
-        return customAnimation;
+    private void setImageDimensions(View view , BitmapTypeRequest imgFormation){
+        int width  = getWidth(view.getWidth());
+        int height = getHeight(view.getHeight());
+        // only override if dimens do not equal zero otherwise do nothing
+        if  (width != 0 && height != 0    )  imgFormation.override(width, height);
     }
 
-    public void setGlideAnimation(ViewPropertyAnimation.Animator glideAnimation) {
-        this.customAnimation = glideAnimation;
+    private int getHeight(int height ){
+        int heightToScale = imagePxHeight != 0 ? imagePxHeight : height;
+        return scaleDownBy != 0 && scaleDownBy != NO_SCALE ? heightToScale / scaleDownBy : heightToScale;
     }
 
-    public int getScaleDownBy() {
-        return scaleDownBy;
-    }
-
-    public void setScaleDownBy(int scaleDownBy) {
-        this.scaleDownBy = scaleDownBy;
-    }
-
-    public boolean isCache() {
-        return cache;
-    }
-
-    public void setCache(boolean cache) {
-        this.cache = cache;
-    }
-
-    public int getImagePxHeight() {
-        return imagePxHeight;
+    private int getWidth(int width ){
+        int widthToScale = imagePxWidth != 0 ? imagePxWidth : width;
+        return scaleDownBy != 0 && scaleDownBy != NO_SCALE ? widthToScale / scaleDownBy : widthToScale;
     }
 
     public void setImagePxHeight(int imagePxHeight) {
         this.imagePxHeight = imagePxHeight;
     }
 
-    public int getImagePxWidth() {
-        return imagePxWidth;
+    public void setImagePxWidth(int imagePxWidth) { this.imagePxWidth = imagePxWidth; }
+
+    public void setPlaceholder(Drawable placeholder) {
+        this.placeholder = placeholder;
     }
 
-    public void setImagePxWidth(int imagePxWidth) {
-        this.imagePxWidth = imagePxWidth;
+    public GlideManager setMeasureOnlyOnce(boolean measureOnlyOnce) { this.measureOnlyOnce = measureOnlyOnce;  return this; }
+
+    public GlideManager setGlideAnimation(ViewPropertyAnimation.Animator glideAnimation) {
+        this.customAnimation = glideAnimation;
+        return this;
     }
 
-    public int getScaleType() {
-        return scaleType;
+    public GlideManager setScaleDownBy(int scaleDownBy) {
+        this.scaleDownBy = scaleDownBy;
+        return this ;
     }
 
-    public void setScaleType(int scaleType) {
+    public GlideManager setCache(boolean cache) {
+        this.cache = cache;
+        return this ;
+    }
+
+    public GlideManager setScaleType(int scaleType) {
         this.scaleType = scaleType;
+        return this;
     }
 
-    public DiskCacheStrategy getCacheStrategy() {
-        return cacheStrategy;
-    }
-
-    public void setCacheStrategy(DiskCacheStrategy cacheStrategy) {
+    public GlideManager setCacheStrategy(DiskCacheStrategy cacheStrategy) {
         this.cacheStrategy = cacheStrategy;
+        return this;
     }
 }

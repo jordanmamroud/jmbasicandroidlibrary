@@ -8,6 +8,15 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="colorBackground">#d9d9d9</color>
+
+    <color name="appbarColor">@color/colorPrimary</color>
+
+    <color name="appbarViewsColor">#fff</color>
+
+    <color name="textColorPrimary">#0a0909</color>
+
+
     <!-- control progressbar -->
     <color name="pbProgressColor">@color/colorAccent</color>
     <color name="pbEmptyColor">#fff</color>

@@ -1,27 +1,22 @@
 package fragments.Lists.GridView;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.example.jordan.basicslibrary.R;
-import com.example.jordan.basicslibrary.Utilities.Interfaces.IDrawableImage;
-import com.example.jordan.basicslibrary.Utilities.Utils.MHelper;
-import com.example.jordan.basicslibrary.Utilities.Utils.ViewHelper;
 
 import java.util.ArrayList;
 
 import GlideHelper.GlideManager;
 import fragments.IAdapterDelegates;
+import functionalinterfaces.IImage;
+import functionalinterfaces.ILockable;
 
 /**
  * Created by Jordan on 7/7/2017.
@@ -30,145 +25,99 @@ import fragments.IAdapterDelegates;
 public class GridViewDelegate implements IAdapterDelegates {
 
     private Context mContext;
-    private int availableImagesCount = 0;
-    private boolean lockEnabled = false;
     private GlideManager glideManager;
+    private boolean allUnlocked = false ;
 
-    public GridViewDelegate(Context mContext) {
-        this.mContext = mContext;
-        lockEnabled = false ;
-    }
-
-    public GridViewDelegate(Context mContext, GlideManager glideManager) {
-        this.mContext = mContext;
-        this.glideManager = glideManager;
-    }
+    public GridViewDelegate(Context mContext) {     this.mContext = mContext;   }
 
     // this constructor is used for locking feature, if not used lock feature must be set
-    public GridViewDelegate(Context mContext,  int availableImagesCount) {
+    public GridViewDelegate(Context mContext, GlideManager glideManager) {
         this.mContext = mContext;
-        this.availableImagesCount = availableImagesCount;
-        lockEnabled = true ;
+        this.glideManager = glideManager ;
     }
 
+    public GridViewDelegate(Context mContext, GlideManager glideManager, boolean allUnlocked) {
+        this.mContext = mContext;
+        this.glideManager = glideManager ;
+        this.allUnlocked = allUnlocked ;
+    }
     @Override
     public void onBindViewHolder(ArrayList itemsList, RecyclerView.ViewHolder holder, int position) {
         GridViewHolder mHolder = (GridViewHolder) holder ;
 
+        // removing from start to prevent visibility issues
+        mHolder.toggleLock( View.GONE );
+
+        Object listItem = itemsList.get(position);
+
         // sets up smooth image caching and loading checking that item has a image .
-        if (    itemsList.get( position) instanceof IDrawableImage  ) {
+        bindImage(   listItem , mHolder );
 
-            String imgLocation = ((IDrawableImage) itemsList.get(position)).getDrawableName();
-            int imageId = mContext.getResources().getIdentifier(imgLocation, "drawable", mContext.getPackageName());
-
-            setGridImage(   imageId , mHolder.thumbnail    );
-
-            // hiding all lock views prior to showing available ones if lock view is enabled .
-            if (lockEnabled) {
-                mHolder.removeLock();
-            }
-            // shows image as locked if lock feature is enabled and image is unavailble
-            if (position >= availableImagesCount && lockEnabled && availableImagesCount > -1) {
-                mHolder.enableLock();
-            }
-        }
+        if(   isLocked(listItem)   )     mHolder.toggleLock(View.VISIBLE);
     }
 
-    public void setGridImage(Object image, ImageView imageView){
-        if(glideManager == null){
-            GlideManager.setDefaultGlideImage(mContext , image, false ,imageView , false );
+    private boolean isLocked    (Object item){  return  item instanceof ILockable && ((ILockable) item).isLocked() && ! allUnlocked;  }
+
+    private void bindImage(Object listItem , GridViewHolder mHolder){
+        Object image = null ;
+        if (    hasImage(listItem)  ) {
+            image = ((IImage) listItem).getImage(mContext);
+
+            if(glideManager != null)  glideManager.setGlideImage(image ,  mHolder.thumbnail );
+
+            else mHolder.thumbnail.setImageResource( (int)  image   );
         }else {
-            glideManager.setGlideImage( image, imageView   );
+            System.out.println("item does not have a image");
         }
     }
 
-    public void setLockEnabled(boolean enableLock){
-        this.lockEnabled = enableLock;
-    }
-
-    public void setAvailableImagesCount(int count ){
-        this.availableImagesCount = count ;
-    }
+    private boolean hasImage(Object listItem){ return     listItem instanceof IImage && ((IImage) listItem).getImage(mContext)   !=    null;      }
 
     @Override
-    public void update(Object o) {
-        // show all images if they are locked , or if new num of available images is passed int as object set it as that ;
-        if(o != null  && o instanceof Integer ){
-            availableImagesCount = (int) o  ;
-        }else {
-            lockEnabled = false ;
-            availableImagesCount = -1;
-        }
+    public void update(Object obj) {
+        // show all images if they are locked
+        System.out.println("update gridview delegate");
+        if ( obj instanceof  Boolean )      allUnlocked =   true ;
     }
 
     @Override
     public RecyclerView.ViewHolder createViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_locked_image, parent, false);
-        return new GridViewHolder(v  , lockEnabled  );
+        return new GridViewHolder(v);
     }
+
+    public void setAllUnlocked(boolean allUnlocked) {   this.allUnlocked = allUnlocked; }
 
     public class GridViewHolder extends RecyclerView.ViewHolder{
-        FrameLayout layout ;
-        ImageView thumbnail ;
+        CardView layout ;
+        ImageView thumbnail , lockImg;
+        View blurredView ;
+        int h ;
+        int w ;
 
-        public GridViewHolder(View itemView , boolean lockEnabled ) {
+        public GridViewHolder(View itemView   ) {
             super(itemView);
-            layout = (FrameLayout) itemView.findViewById(R.id.imageItemLO);
+            layout = (CardView) itemView.findViewById(R.id.imageItemLO);
             thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
+            blurredView = itemView.findViewById(R.id.blurView);
+            lockImg = (ImageView) itemView.findViewById(R.id.lockedImg) ;
 
-            if(lockEnabled) {
-                layout.addView( setLockImage() );
-                layout.addView( setBlurView()    );
-            }
+            // doing this to save height and width to avoid having to always recalculate for views of same size
+            thumbnail.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    thumbnail.getViewTreeObserver().removeOnPreDrawListener(this);
+                     // doing this to prevent always having to measure thumbnail when setting view , is faster .
+                    glideManager.setImagePxHeight(  h );
+                    glideManager.setImagePxWidth(   w  );
+                    return false;
+                }
+            });
+         }
+
+        private void toggleLock(int visibility){
+            blurredView.setVisibility(visibility);
+            lockImg.setVisibility(visibility);
         }
-
-        public void removeLock(){
-            if(layout.findViewWithTag("lockIMG") != null) {
-                layout.findViewWithTag("lockIMG").setVisibility(View.GONE);
-                layout.findViewWithTag("blurView").setVisibility(View.GONE);
-            }
-        }
-
-        public void enableLock(){
-            if(layout != null) {
-                layout.findViewWithTag("lockIMG").setVisibility(View.VISIBLE);
-                layout.findViewWithTag("blurView").setVisibility(View.VISIBLE);
-            }
-        }
-
-        public ImageView setLockImage(){
-            ImageView imageView = new ImageView(mContext);
-            int height = MHelper.getPixelsFromDps(100 , mContext) ;
-            int width = MHelper.getPixelsFromDps(100 , mContext) ;
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams( width , height  );
-            params.gravity = Gravity.CENTER ;
-            imageView.setTag("lockIMG");
-            imageView.setVisibility(View.GONE);
-            imageView.setLayoutParams(params);
-            imageView.setImageResource(R.drawable.lock);
-            return imageView ;
-        }
-
-        public View setBlurView(){
-            View blurView = new View(mContext);
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT , ViewGroup.LayoutParams.MATCH_PARENT );
-            blurView.setTag("blurView");
-            blurView.setVisibility(View.GONE);
-            blurView.setLayoutParams(layoutParams);
-            blurView.setAlpha( .9f );
-            blurView.setBackgroundColor(Color.parseColor("#999EA0"));
-
-            return blurView ;
-        }
-
-        public View getLockView(){
-            return layout.findViewWithTag("lockIMG") ;
-        }
-
-        public View getBlurView(){
-            return layout.findViewWithTag("blurView") ;
-        }
-
     }
-
 }

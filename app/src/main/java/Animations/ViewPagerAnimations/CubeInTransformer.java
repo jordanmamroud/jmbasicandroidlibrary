@@ -18,13 +18,14 @@ package Animations.ViewPagerAnimations;
 
 import android.view.View;
 
-public class CubeOutTransformer extends BaseTransformer {
+public class CubeInTransformer extends BaseTransformer {
 
 	@Override
 	protected void onTransform(View view, float position) {
-		view.setPivotX(position < 0f ? view.getWidth() : 0f);
-		view.setPivotY(view.getHeight() * 0.5f);
-		view.setRotationY(90f * position);
+		// Rotate the fragment on the left or right edge
+		view.setPivotX(position > 0 ? 0 : view.getWidth());
+		view.setPivotY(0);
+		view.setRotationY(-90f * position);
 	}
 
 	@Override

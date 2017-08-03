@@ -337,6 +337,15 @@ public class ViewInstantiatorHelper {
         mPurchaseListener = null;
     }
 
+    public void disposeEvenIfAsyncRunning(){
+        flagEndAsync();
+        try{
+            dispose();
+        }catch (Exception e){
+            System.out.println("error disposing" + e.getMessage());
+        }
+    }
+
     /**
      * Disposes of object, releasing resources. If there is an in-progress async operation, this
      * method will queue the dispose to occur after the operation has finished.

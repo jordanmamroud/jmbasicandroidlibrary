@@ -12,7 +12,9 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -37,12 +39,11 @@ public class MHelper {
     }
 
     public static FragmentTransaction setupFragTransaction(FragmentManager manager,int animIn, int animOut,  String backstack){
-        FragmentTransaction transaction =manager.beginTransaction();
+        FragmentTransaction transaction =   manager.beginTransaction();
         transaction.setCustomAnimations( animIn, animOut, animIn, animOut   );
         if(backstack != null) {
             transaction.addToBackStack(backstack);
         }
-
         return transaction ;
     }
 
@@ -55,7 +56,6 @@ public class MHelper {
         transaction.commit();
     }
 
-
     public static void setupFragment(FragmentManager fm, int contentId, Fragment fragment, String fragTag ,
                                      int animIn, int animOut, @Nullable String backstackTag ){
 
@@ -65,7 +65,19 @@ public class MHelper {
             transaction.addToBackStack(backstackTag);
         }
         transaction.replace(contentId, fragment,    fragTag);
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
+    }
+
+    public static void setupFragment(FragmentManager fm, int contentId, Fragment fragment, String fragTag ,
+                                     int animIn, int animOut, @Nullable String backstackTag , int backstackLimit){
+
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.setCustomAnimations(animIn, animOut, animIn, animOut);
+        if(  backstackTag != null && fm.getBackStackEntryCount() < backstackLimit    ) {
+            transaction.addToBackStack(backstackTag);
+        }
+        transaction.replace(contentId, fragment,    fragTag);
+        transaction.commitAllowingStateLoss();
     }
 
     public static int getRandomNum(int max){
@@ -74,7 +86,25 @@ public class MHelper {
     }
 
     public static int getImageId(Context context, String imageName){
+        if(imageName == null) return  0 ;
+
         return context.getResources().getIdentifier(imageName.toLowerCase().trim() , "drawable", context.getPackageName() );
+    }
+
+
+
+    public static ArrayList getRandomItemsFromList(ArrayList<String> list , int numOfItemsToGet){
+        ArrayList<String> items = new ArrayList<>();
+        ArrayList<Integer> nums = new ArrayList<>();
+
+        while (items.size() <  numOfItemsToGet){
+            int rand = getRandomNum(list.size() );
+            nums.add(rand);
+            if(nums.indexOf(rand) == -1){
+                items.add(list.get(rand));
+            }
+        }
+        return items;
     }
 
     public static boolean compareString(String one , String two){

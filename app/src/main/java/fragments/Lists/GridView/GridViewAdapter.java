@@ -18,27 +18,28 @@ public class GridViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     ArrayList list ;
     private Context mContext;
-    private IAdapterDelegates delegates ;
+    private IAdapterDelegates viewDelegate;
 
-    public GridViewAdapter(Context context, ArrayList items,  IAdapterDelegates delegates  ) {
+    public GridViewAdapter(Context context, ArrayList items,  IAdapterDelegates viewDelegate) {
         this.mContext = context ;
-        this.delegates = delegates ;
+        this.viewDelegate = viewDelegate;
         this.list = items ;
     };
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return delegates.createViewHolder(parent, viewType  );
+        return viewDelegate.createViewHolder(parent, viewType  );
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        delegates.onBindViewHolder( list, holder , position    );
+
+        viewDelegate.onBindViewHolder( list, holder , position    );
     };
 
     // updates delegate prior to running notify data set changed
     public void updateDelegate(Object o){
-        delegates.update(o);
+        viewDelegate.update(o);
         this.notifyDataSetChanged();
     }
 
