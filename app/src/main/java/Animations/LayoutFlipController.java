@@ -6,9 +6,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.content.Context;
 import android.view.View;
-import android.view.animation.TranslateAnimation;
 
-import com.example.jordan.basicslibrary.R;
+import com.example.jordan.jmbasicandroidlibrary.R;
+
 
 /**
  * Created by Jordan on 7/22/2017.

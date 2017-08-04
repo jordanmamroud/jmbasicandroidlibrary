@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.example.jordan.basicslibrary.R;
+import com.example.jordan.jmbasicandroidlibrary.R;
 import utilities.ListBuilder;
 import utilities.MHelper;
 

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
-import com.example.jordan.basicslibrary.R;
+import com.example.jordan.jmbasicandroidlibrary.R;
 
 import java.util.ArrayList;
 

@@ -5,9 +5,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.ViewGroup;
 
-import com.example.jordan.basicslibrary.R;
+import com.example.jordan.jmbasicandroidlibrary.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
