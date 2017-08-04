@@ -1,4 +1,4 @@
-package com.example.jordan.basicslibrary.Utilities.ScrollingBehaviors;
+package scrollingbehaviors;
 
 import android.content.Context;
 import android.support.design.widget.AppBarLayout;

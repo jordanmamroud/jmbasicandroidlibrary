@@ -9,8 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.jordan.basicslibrary.R;
-import com.example.jordan.basicslibrary.Utilities.Utils.ListBuilder;
-import com.example.jordan.basicslibrary.Utilities.Utils.MHelper;
+import utilities.ListBuilder;
+import utilities.MHelper;
 
 import java.util.ArrayList;
 

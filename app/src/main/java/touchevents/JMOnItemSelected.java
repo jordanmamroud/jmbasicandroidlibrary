@@ -1,4 +1,4 @@
-package com.example.jordan.basicslibrary.Utilities.EventListeners;
+package touchevents;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -11,14 +11,14 @@ import android.widget.AdapterView;
  * Created by Jordan on 5/4/2017.
  */
 
-public class MOnItemSelected implements RecyclerView.OnItemTouchListener {
+public class JMOnItemSelected implements RecyclerView.OnItemTouchListener {
 
     private OnItemClickListener mListener;
     private OnItemLongClickListener longClickListener ;
 
     GestureDetector mGestureDetector;
 
-    public MOnItemSelected(Context context , OnItemClickListener listener) {
+    public JMOnItemSelected(Context context , OnItemClickListener listener) {
         mListener = listener;
         mGestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
             @Override
@@ -28,7 +28,7 @@ public class MOnItemSelected implements RecyclerView.OnItemTouchListener {
         });
     }
 
-    public MOnItemSelected(Context context ,final RecyclerView recyclerView , final OnItemLongClickListener longClickListener) {
+    public JMOnItemSelected(Context context , final RecyclerView recyclerView , final OnItemLongClickListener longClickListener) {
         this.longClickListener = longClickListener;
         mGestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener(){
             @Override

@@ -1,4 +1,4 @@
-package com.example.jordan.basicslibrary.Utilities.Utils;
+package utilities;
 
 import android.content.Context;
 

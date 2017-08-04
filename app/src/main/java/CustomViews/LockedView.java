@@ -2,17 +2,13 @@ package CustomViews;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.widget.AppCompatButton;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.example.jordan.basicslibrary.R;
-import com.example.jordan.basicslibrary.Utilities.Utils.MHelper;
+import utilities.MHelper;
 
 /**
  * Created by Jordan on 7/21/2017.

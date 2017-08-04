@@ -4,12 +4,12 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.ViewTreeObserver;
 
-import com.example.jordan.basicslibrary.Utilities.EventListeners.MOnPageChange;
 
 import java.util.ArrayList;
 import java.util.Observable;
 
 import fragments.BaseFragment;
+import touchevents.JMOnPageChange;
 
 /**
  * Created by Jordan on 5/11/2017.
@@ -32,7 +32,7 @@ public abstract class ViewPagerFragment extends BaseFragment  {
         mViewPager.setAdapter(adapter);
 
         mViewPager.setOffscreenPageLimit(offScreenLimit);
-        mViewPager.addOnPageChangeListener( new MOnPageChange(  this ::  onPageChanged   )  );
+        mViewPager.addOnPageChangeListener( new JMOnPageChange(  this ::  onPageChanged   )  );
 
         if(pageTransformer != null) mViewPager.setPageTransformer( false    ,  pageTransformer   );
         setCurrentItem( currentPosition  );

@@ -1,4 +1,4 @@
-package com.example.jordan.basicslibrary.Utilities.Interfaces;
+package functionalinterfaces;
 
 /**
  * Created by Jordan on 7/12/2017.

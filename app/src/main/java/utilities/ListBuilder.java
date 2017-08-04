@@ -1,11 +1,7 @@
-package com.example.jordan.basicslibrary.Utilities.Utils;
-
-import android.util.Log;
+package utilities;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
-import functionalinterfaces.ITitled;
 
 /**
  * Created by Jordan on 8/3/2017.

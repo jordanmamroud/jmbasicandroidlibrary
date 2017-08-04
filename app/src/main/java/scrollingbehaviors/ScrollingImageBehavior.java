@@ -1,4 +1,4 @@
-package com.example.jordan.basicslibrary.Utilities.ScrollingBehaviors;
+package scrollingbehaviors;
 
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.Toolbar;

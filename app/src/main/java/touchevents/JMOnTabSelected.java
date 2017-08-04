@@ -1,4 +1,4 @@
-package com.example.jordan.basicslibrary.Utilities.EventListeners;
+package touchevents;
 
 import android.support.design.widget.TabLayout;
 
@@ -6,11 +6,11 @@ import android.support.design.widget.TabLayout;
  * Created by Jordan on 5/1/2017.
  */
 
-public class MOnTabSelected implements TabLayout.OnTabSelectedListener {
+public class JMOnTabSelected implements TabLayout.OnTabSelectedListener {
 
     private MyTabs tabSelected ;
 
-    public MOnTabSelected(MyTabs tabSelected) {
+    public JMOnTabSelected(MyTabs tabSelected) {
         this.tabSelected = tabSelected ;
     }
 

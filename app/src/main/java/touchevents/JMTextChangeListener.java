@@ -1,4 +1,4 @@
-package com.example.jordan.basicslibrary.Utilities.EventListeners;
+package touchevents;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -7,11 +7,11 @@ import android.text.TextWatcher;
  * Created by Jordan on 5/13/2017.
  */
 
-public class MTextChangeListener implements TextWatcher {
+public class JMTextChangeListener implements TextWatcher {
 
     MOnTextChanged textChanged ;
 
-    public MTextChangeListener(MOnTextChanged textChanged) {
+    public JMTextChangeListener(MOnTextChanged textChanged) {
         this.textChanged = textChanged ;
     }
 

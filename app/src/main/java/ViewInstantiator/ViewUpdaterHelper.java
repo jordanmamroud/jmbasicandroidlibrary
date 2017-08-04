@@ -5,7 +5,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.jordan.basicslibrary.Utilities.Utils.ViewHelper;
+import utilities.ViewHelper;
 
 import org.greenrobot.eventbus.EventBus;
 

@@ -1,4 +1,4 @@
-package com.example.jordan.basicslibrary.Utilities.Utils;
+package utilities;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -9,10 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.DisplayMetrics;
 import android.view.Display;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Random;

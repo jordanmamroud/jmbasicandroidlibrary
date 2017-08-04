@@ -1,4 +1,4 @@
-package com.example.jordan.basicslibrary.Utilities.EventListeners;
+package touchevents;
 
 import android.support.v4.view.ViewPager;
 
@@ -6,11 +6,11 @@ import android.support.v4.view.ViewPager;
  * Created by Jordan on 5/30/2017.
  */
 
-public class MOnPageChange implements ViewPager.OnPageChangeListener{
+public class JMOnPageChange implements ViewPager.OnPageChangeListener{
 
     OnPageChange onPageChange;
 
-    public MOnPageChange(OnPageChange onPageChange) {
+    public JMOnPageChange(OnPageChange onPageChange) {
         this.onPageChange = onPageChange ;
     }
 

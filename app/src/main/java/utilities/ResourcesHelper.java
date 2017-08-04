@@ -1,4 +1,4 @@
-package com.example.jordan.basicslibrary.Utilities.Utils;
+package utilities;
 
 /**
  * Created by Jordan on 7/28/2017.

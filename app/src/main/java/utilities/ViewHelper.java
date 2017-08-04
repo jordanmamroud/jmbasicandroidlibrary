@@ -1,13 +1,9 @@
-package com.example.jordan.basicslibrary.Utilities.Utils;
+package utilities;
 
 import android.content.Context;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 /**

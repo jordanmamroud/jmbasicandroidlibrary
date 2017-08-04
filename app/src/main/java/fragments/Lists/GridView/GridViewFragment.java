@@ -2,24 +2,16 @@ package fragments.Lists.GridView;
 
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 
-import com.example.jordan.basicslibrary.R;
-import com.example.jordan.basicslibrary.Utilities.EventListeners.MOnItemSelected;
+import touchevents.JMOnItemSelected;
 
-import java.util.ArrayList;
 import java.util.Observable;
-import java.util.Observer;
 
 import fragments.BaseFragment;
-import fragments.IAdapterDelegates;
 
 public abstract class GridViewFragment extends BaseFragment{
 
@@ -28,7 +20,7 @@ public abstract class GridViewFragment extends BaseFragment{
 
     public void setupGridView(RecyclerView recyclerView , int itemsPerRow){
         this.mRecyclerView = recyclerView ;
-        mRecyclerView.addOnItemTouchListener(new MOnItemSelected(   getContext()    , this :: onItemClicked     ));
+        mRecyclerView.addOnItemTouchListener(new JMOnItemSelected(   getContext()    , this :: onItemClicked     ));
         setupRecyclerView(  itemsPerRow   );
     }
 

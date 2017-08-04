@@ -13,7 +13,7 @@ import fragments.IAdapterDelegates;
  * Created by Jordan on 5/4/2017.
  */
 
-public class MListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private int layoutResource;
     private ArrayList list ;
@@ -22,7 +22,7 @@ public class MListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
 
 
-    public MListAdapter(Context context, ArrayList list,  IAdapterDelegates delegate ){
+    public ListAdapter(Context context, ArrayList list, IAdapterDelegates delegate ){
         this.list = list;
         this.context = context;
         this.delegate = delegate ;
