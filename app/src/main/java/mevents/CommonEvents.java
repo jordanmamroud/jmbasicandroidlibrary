@@ -21,7 +21,11 @@ public class CommonEvents {
 
     // ie user presses button to upgrade to premium
     public static class UpgradeRequest{
+        boolean test;
         public UpgradeRequest() {}
+        public UpgradeRequest(boolean test) {this.test = test ;}
+
+        public boolean getTest(){return test ; };
     }
 
     // ie viewpager position gets changed

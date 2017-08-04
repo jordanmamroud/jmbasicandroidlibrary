@@ -27,7 +27,7 @@ public class GlideUtils {
 
     public static void setLayoutBackgroundImage(Context context, ViewGroup layout, Object background, boolean isFromRes){
         GlideLayoutTarget imageTarget = new GlideLayoutTarget(context, layout , isFromRes);
-        Glide.with(context).load( background ).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(imageTarget);
+        Glide.with(context).load( background ).fitCenter().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(imageTarget);
     }
 
     public static  void setScaledDownImage(Context mContext , Object image , ImageView view, int downScale , boolean cache){

@@ -16,15 +16,15 @@ import com.example.jordan.basicslibrary.R;
 
 public class LayoutFlipController {
 
-    Context mContext ;
-    AnimatorSet mSetRightOut;
-    AnimatorSet mSetLeftIn;
-    View frontLayout ;
-    View backLayout ;
-    boolean mIsBackVisible ;
-    boolean mIsRunning ;
-    IOnFlipToFront  iOnFlipToFront ;
-    IOnFlipToBack iOnFlipToBack ;
+    private Context mContext ;
+    private AnimatorSet mSetRightOut;
+    private AnimatorSet mSetLeftIn;
+    private View frontLayout ;
+    private View backLayout ;
+    private boolean mIsBackVisible ;
+    private boolean mIsRunning ;
+    private IOnFlipToFront  iOnFlipToFront ;
+    private IOnFlipToBack iOnFlipToBack ;
 
     public LayoutFlipController(Context mContext, View frontLayout , View backLayout) {
         this.frontLayout = frontLayout ;
@@ -91,6 +91,7 @@ public class LayoutFlipController {
     }
 
     private void flipToFront(){
+        frontLayout.setVisibility(View.VISIBLE);
         mIsBackVisible = false;
         frontLayout.bringToFront();
         mSetRightOut.setTarget(backLayout);
@@ -110,6 +111,8 @@ public class LayoutFlipController {
     public boolean isIsBackVisible() {
         return mIsBackVisible;
     }
+
+    public void setIsBackVisible(boolean visible){ this.mIsBackVisible = visible ;}
 
     public LayoutFlipController setOnFlipToFrontListener(IOnFlipToFront listener){
         this.iOnFlipToFront = listener;

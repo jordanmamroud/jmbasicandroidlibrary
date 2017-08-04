@@ -18,6 +18,8 @@ import static ViewInstantiator.ViewInstantiatorHelper.BILLING_RESPONSE_RESULT_BI
  */
 
 public class ViewUpdaterHelper {
+
+
     private Context mContext ;
     private ViewInstantiatorHelper viewInstantiatorHelper;
     private static final String SKU_PREMIUM = "premium";

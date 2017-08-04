@@ -16,16 +16,19 @@
     </style>
     
     <style name="AppTheme.Button" parent="Widget.AppCompat.Button">
-         <item name="elevation">10dp</item>
          <item name="android:layout_margin">10dp</item>
          <item name="backgroundTint">@color/colorAccent</item>
          <item name="android:textColor">@color/textColorPrimary</item>
          <item name="android:layout_height">60dp</item>
-         <item name="android:layout_width">200dp</item>
+         <item name="android:layout_width">wrap_content</item>
      </style>
 
-    <style name="AppTheme.Button.HomeButton">
+    <style name="AppTheme.Button.Colored" parent="AppTheme.Button"> <item name="android:textColor">@color/colorAccent</item> </style>
+
+    <style name="AppTheme.Button.HomeButton" parent="AppTheme.Button">
         <item name="backgroundTint">#fff</item>
+        <item name="android:layout_height">@dimen/largeButtonHeight</item>
+        <item name="android:layout_width">200dp</item>
     </style>
 
     <style name="AppTheme.TextView" parent="TextAppearance.AppCompat">
@@ -42,10 +45,11 @@
         <item name="android:textSize">@dimen/mMediumText</item>
         <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingRight">10dp</item>
-       <item name="android:textColor">@color/appbarViewsColor</item>
-       <item name="android:layout_width">wrap_content</item>
-       <item name="android:layout_height">wrap_content</item>
-       <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textColor">@color/appbarViewsColor</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:tint">@color/appbarViewsColor</item>
    </style>
 
     <style name="AppTheme.HeaderView.Title" parent="AppTheme.HeaderView"> <item name="android:textSize">@dimen/titleText</item></style>
@@ -57,6 +61,13 @@
         <item name="android:background">#1e1e1e</item>
     </style>
 
+    <style name="AppTheme.ScrollView">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:scrollbarThumbVertical">@drawable/custom_scrollview_thumb</item>
+        <item name="android:scrollbarTrackVertical">@drawable/custom_scrollview_track</item>
+        <item name="android:scrollbarStyle">insideInset</item>
+    </style>
 
     <style name="FullScreenDialog" parent="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
         <item name="android:windowNoTitle">true</item>
@@ -76,7 +87,11 @@
         <item name="cardBackgroundColor">#fff</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">170dp</item>
-        <item name="android:layout_margin">5dp</item>
+
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:layout_marginLeft">5dp</item>
     </style>
 
     <style name="gridThumbnail">
@@ -86,12 +101,12 @@
         <item name="android:scaleType">fitXY</item>
     </style>
 
-    <!-- blurs bg of view behind infor button and flashcard title -->
+    <!-- blurs bg of view behind infor button and flashcard name -->
     <style name="Blur">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:alpha">.3</item>
-        <item name="android:background">#999EA0</item>
+        <item name="android:background">#414141</item>
     </style>
 
 </resources>

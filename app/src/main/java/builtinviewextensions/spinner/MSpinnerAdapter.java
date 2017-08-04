@@ -1,25 +1,20 @@
 package builtinviewextensions.spinner;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.jordan.basicslibrary.R;
+import com.example.jordan.basicslibrary.Utilities.Utils.ListBuilder;
 import com.example.jordan.basicslibrary.Utilities.Utils.MHelper;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+
+import functionalinterfaces.ITitled;
 
 /**
  * Created by Jordan on 7/24/2017.
@@ -28,43 +23,64 @@ import java.util.List;
 public class MSpinnerAdapter extends ArrayAdapter {
 
     String label = null;
-    ArrayList<String> allItems = new ArrayList<>();
+    ArrayList  allItems = new ArrayList<>();
     Context context ;
 
+    boolean createRandomOptions ;
+    int numOfItems = 5 ;
     int labelTextSize = 20 ;
 
-    public MSpinnerAdapter(@NonNull Context context,  ArrayList<String> items) {
+    public MSpinnerAdapter(@NonNull Context context) {
         super(context, R.layout.support_simple_spinner_dropdown_item  );
         this.context = context ;
-        addItems(items);
     }
 
-    public MSpinnerAdapter(@NonNull Context context, @LayoutRes int textViewResource  , String label,  ArrayList<String> items) {
-        super(context, textViewResource);
+    public MSpinnerAdapter(@NonNull Context context,  String label,  ArrayList  items) {
+        super(context,  R.layout.support_simple_spinner_dropdown_item );
         this.context = context;
         this.label = label ;
         addItems(items);
     }
 
-     @Override
+    public MSpinnerAdapter createRandomOptions (ArrayList  itemsToChooseFrom , @Nullable Object presetItem){
+        ArrayList optionsToChoose = ListBuilder.getRandomItemsWithOnePreSet(numOfItems , itemsToChooseFrom , presetItem);
+        addItems(optionsToChoose);
+        return this ;
+    }
+
+    private void addItems(ArrayList items){
+        allItems.addAll(items);
+        addAll(items);
+    }
+
+    @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if(label != null) {
-            TextView textView = (TextView) super.getView(position, convertView, parent);
-            textView.setText(MHelper.capitalize(label));
-            textView.setTextSize(labelTextSize);
-            return   textView ;
+            TextView labelTextView = (TextView) super.getView(position, convertView, parent);
+            labelTextView.setText(   MHelper.capitalize(label)  );
+            labelTextView.setTextSize(labelTextSize);
+            return   labelTextView ;
         }
         return super.getView(position, convertView, parent);
     }
 
-    public void addItems(ArrayList<String> items){
-         for(String item : items){
-            allItems.add(item);
-            add(item);
-        }
+    @Override
+    public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        TextView textViewInDropdown =(TextView) super.getDropDownView(position, convertView, parent) ;
+        String title = MHelper.capitalize(  getItemTitle(position )   );
+        textViewInDropdown.setText(title);
+        return textViewInDropdown   ;
     }
 
-    public String getItem(int position){    return  allItems.get(position)  ;   }
+    public String getItemTitle(int pos){
+        Object listItem = allItems.get(pos);
+        String title =  null;
+        if( listItem    instanceof String ) title = (String) listItem ;
+        if(listItem instanceof ITitled) title =  (  (ITitled) listItem    ).getTitle() ;
+        return title ;
+    }
+
+    public Object getItem(int position){    return  allItems.get(position)  ;   }
 
     public String getLabel() {
         return label;

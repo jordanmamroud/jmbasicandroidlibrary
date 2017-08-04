@@ -13,8 +13,12 @@
     <dimen name="titleText">30dp</dimen>
 
 
+    <dimen name="homeScreenButtonHeight">100dp</dimen>
+
     <dimen name="smallButtonHeight">50dp</dimen>
+
     <dimen name="mediumButtonHeight">60dp</dimen>
-    <dimen name="largeButtonHeight">80dp</dimen>
+
+    <dimen name="largeButtonHeight">60dp</dimen>
 
 </resources>
