@@ -1,7 +1,13 @@
 <resources>
-    <string name="app_name">BasicsLibrary</string>
+    <string name="app_name">jmbasicandroidlibrary</string>
 
     <!-- text for locked button in cv_locked -->
     <string name="lockedViewBtnTxt">Upgrade</string>
 
+    <string name="upgradeCompletedMsg">Congratulations on your upgrade</string>
+    <string name="queryErrorMsg">Sorry we are unable to connect please try again later</string>
+    <string name="purchaseFailedErrorMsg">Sorry there was an error please try again later</string>
+    <string name="askToLoginMsg">Please sign into your google account to upgrade</string>
+    <string name="unableToConnectMsg">Sorry we are unable to connect to your google account</string>
+    <string name="noInternetWhenUpgradingMsg"></string>
 </resources>

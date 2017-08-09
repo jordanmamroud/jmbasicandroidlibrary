@@ -5,6 +5,9 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.jordan.jmbasicandroidlibrary.R;
+
+import functionalinterfaces.Upgradeable;
 import utilities.ViewHelper;
 
 import org.greenrobot.eventbus.EventBus;
@@ -19,33 +22,33 @@ import static ViewInstantiator.ViewInstantiatorHelper.BILLING_RESPONSE_RESULT_BI
 
 public class ViewUpdaterHelper {
 
-
     private Context mContext ;
     private ViewInstantiatorHelper viewInstantiatorHelper;
     private static final String SKU_PREMIUM = "premium";
+    private Upgradeable upgradeable ;
 
-    public ViewUpdaterHelper(Context mContext, ViewInstantiatorHelper viewInstantiatorHelper) {
+    public ViewUpdaterHelper(Context mContext,  Upgradeable upgradeable ,ViewInstantiatorHelper viewInstantiatorHelper) {
         this.mContext = mContext;
         this.viewInstantiatorHelper = viewInstantiatorHelper;
+        this.upgradeable = upgradeable ;
     }
 
     public void requestUsersPremiumStatusAsync( ){  viewInstantiatorHelper.startSetup(  getSetupFinishedListener()  );   }
     
     private ViewInstantiatorHelper.OnIabSetupFinishedListener getSetupFinishedListener(){
         return (PIabResult result)  ->  {
-            if (    !   result.isSuccess() ) handleSetupError(   result );
-
-            else checkIfUserHasMadePurchase();
+            if (    result.isSuccess() ) checkIfUserHasMadePurchase();
+            else handleSetupError();
         };
     }
     
-    private void handleSetupError(PIabResult result){   ViewHelper.showMessage(mContext , "Sorry we are not able to connect to your google account", Toast.LENGTH_SHORT );  }
+    private void handleSetupError(){ showMessage(mContext.getString(   R.string.unableToConnectMsg    ));  }
     
     private void checkIfUserHasMadePurchase(){
         try {
             viewInstantiatorHelper.queryInventoryAsync(     getInventoryQueryFinishedListener()   )  ;
         }catch (Exception e){
-            Log.d("ViewUpdaterHelper", "there was a error checking status");
+            showMessage(mContext.getString( R.string.queryErrorMsg   ));
         }
     }
     
@@ -53,50 +56,42 @@ public class ViewUpdaterHelper {
         return (PIabResult result, PInventory inventory) -> {
             if (result.isFailure()) handleInventoryQueryError();
 
-            else postUpgradeStatus(  inventory.hasPurchase(SKU_PREMIUM)    );
+            else postUpgradeStatus(  inventory.hasPurchase( SKU_PREMIUM  )    );
         };
     }
     
-    private void handleInventoryQueryError(){
-        Log.d("viewUpdaterHelper", "there was a error checking status");
-        ViewHelper.showMessage(mContext , " Sorry we are unable to connect please try again later", Toast.LENGTH_SHORT);
-    }
+    private void handleInventoryQueryError(){   ViewHelper.showMessage(mContext ,mContext.getString(R.string.queryErrorMsg), Toast.LENGTH_SHORT);   }
 
     public void purchaseAttempt(){
         // no problem if it runs even if prevous attempt is not running . 
         clearAsyncPurchaseAttempt();
-        // just listener for after purchase attempt is done  run in launch purchase flow;
-         
+        // sets listener for after purchase attempt is done  run in launch purchase flow;
+
         try {
-            viewInstantiatorHelper.launchPurchaseFlow((Activity) mContext   , SKU_PREMIUM   ,    10001, getPuchaseFinishedListener()    ,   "bGoa+V7g/yqDXvKRqq+JTFn4uQZbPiQJo4pf9RzJ"    );
+            viewInstantiatorHelper.launchPurchaseFlow((Activity) mContext   , SKU_PREMIUM   ,
+                    10001,  getPuchaseFinishedListener()    ,   "bGoa+V7g/yqDXvKRqq+JTFn4uQZbPiQJo4pf9RzJ"    );
         }catch (Exception e){
             handlePurchaseAttemptError();
         }
     }
-    
+
     private ViewInstantiatorHelper.OnIabPurchaseFinishedListener getPuchaseFinishedListener(){
         return (PIabResult result, PPurchases info)->{
             if (      isSucessful(info)      ) postPurchaseSuccessfulEvent();
             
-            else if(    isFailureProbalySinceNotLoggedIn(   result )    ) showAskToLoginMessage();
+            else if(    isFailureProbalySinceNotLoggedIn(   result )    ) showMessage(  mContext.getString(R.string.askToLoginMsg)   );
             
             clearAsyncPurchaseAttempt();
         };
     }
 
-    private void postPurchaseSuccessfulEvent(){
-        postUpgradeStatus(true);
-        ViewHelper.showMessage(mContext, "Congratulations on your upgrade" , Toast.LENGTH_SHORT)    ;
-    }
+    private void handlePurchaseAttemptError(){  showMessage( mContext.getString(R.string.purchaseFailedErrorMsg))       ;   }
 
-    private void postUpgradeStatus(boolean status   ){EventBus.getDefault().post(new CommonEvents.UpgradeStatus(status));    }
+    private void postPurchaseSuccessfulEvent(){     upgradeable.purchaseSuccessful();   }
 
-    private void handlePurchaseAttemptError(){
-        Toast.makeText(mContext , " sorry we are unable to make purchases at this time", Toast.LENGTH_SHORT).show();
-        Log.e("viewupdaterhelper", "sorry there with the attempt to upgrade ");
-    }
+    private void postUpgradeStatus(boolean status   ){      upgradeable.onIsPurchasedResultReceived(status);    }
 
-    private void showAskToLoginMessage(){ Toast.makeText(mContext, "Please sign into your google account to upgrade " , Toast.LENGTH_LONG).show();  }
+    private void showMessage(String msg){ Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();}
 
     private boolean isSucessful(PPurchases info){ return info.getSku().equals(SKU_PREMIUM) ;    }
 
