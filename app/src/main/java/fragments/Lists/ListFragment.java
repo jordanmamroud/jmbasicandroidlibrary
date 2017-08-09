@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 
-import touchevents.JMOnItemSelected;
+import uievents.touchevents.JOnItemSelected;
 
 /**
  * Created by Jordan on 5/8/2017.
@@ -15,7 +15,7 @@ import touchevents.JMOnItemSelected;
 public class ListFragment extends Fragment {
 
     private RecyclerView list;
-    private JMOnItemSelected.OnItemClickListener onItemClickListener;
+    private JOnItemSelected.OnItemClickListener onItemClickListener;
     private ListAdapter adapter ;
 
 
@@ -27,7 +27,7 @@ public class ListFragment extends Fragment {
     // pass in recyclerview
     public void setupRecyclerview(RecyclerView mRecyclerView){
         this.list = mRecyclerView ;
-        list.addOnItemTouchListener(new JMOnItemSelected( getContext() , this :: onItemSelected  ));
+        list.addOnItemTouchListener(new JOnItemSelected( getContext() , this :: onItemSelected  ));
         list.setLayoutManager(getLayoutManager() );
         list.setAdapter(adapter);
     }

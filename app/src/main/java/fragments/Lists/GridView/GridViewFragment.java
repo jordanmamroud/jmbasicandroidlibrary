@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 
-import touchevents.JMOnItemSelected;
+import uievents.touchevents.JOnItemSelected;
 
 import java.util.Observable;
 
@@ -20,7 +20,7 @@ public abstract class GridViewFragment extends BaseFragment{
 
     public void setupGridView(RecyclerView recyclerView , int itemsPerRow){
         this.mRecyclerView = recyclerView ;
-        mRecyclerView.addOnItemTouchListener(new JMOnItemSelected(   getContext()    , this :: onItemClicked     ));
+        mRecyclerView.addOnItemTouchListener(new JOnItemSelected(   getContext()    , this :: onItemClicked     ));
         setupRecyclerView(  itemsPerRow   );
     }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package Animations.ViewPagerAnimations;
+package Animations.viewpageranimations;
 
 import android.view.View;
 

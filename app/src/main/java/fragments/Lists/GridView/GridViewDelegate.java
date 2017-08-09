@@ -13,7 +13,7 @@ import com.example.jordan.jmbasicandroidlibrary.R;
 
 import java.util.ArrayList;
 
-import GlideHelper.GlideManager;
+import glide.GlideManager;
 import fragments.IAdapterDelegates;
 import functionalinterfaces.IImage;
 import functionalinterfaces.ILockable;

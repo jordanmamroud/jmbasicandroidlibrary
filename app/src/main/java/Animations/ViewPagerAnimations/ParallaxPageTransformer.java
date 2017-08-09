@@ -1,4 +1,4 @@
-package Animations.ViewPagerAnimations;
+package Animations.viewpageranimations;
 
 import android.view.View;
 

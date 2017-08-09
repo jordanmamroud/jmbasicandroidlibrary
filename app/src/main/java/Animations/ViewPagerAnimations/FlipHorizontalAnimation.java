@@ -1,4 +1,4 @@
-package Animations.ViewPagerAnimations;
+package Animations.viewpageranimations;
 
 /**
  * Created by Jordan on 7/10/2017.

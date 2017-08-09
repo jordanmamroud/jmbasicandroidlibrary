@@ -4,7 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.view.View;
 
-import Animations.avm.BaseViewAnimator;
+import Animations.viewanimationslib.BaseViewAnimator;
 
 /**
  * Created by Jordan on 7/29/2017.

@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.jordan.jmbasicandroidlibrary.R;
-import utilities.MHelper;
+import utilities.JHelper;
+import utilities.MathHelper;
 
 /**
  * Created by Jordan on 7/21/2017.
@@ -45,8 +46,8 @@ public class LockedView {
 
     public ImageView getLockImage(){
         ImageView imageView = new ImageView(mContext);
-        int height = MHelper.getPixelsFromDps(100 , mContext) ;
-        int width = MHelper.getPixelsFromDps(100 , mContext) ;
+        int height = MathHelper.getPixelsFromDps(100 , mContext) ;
+        int width = MathHelper.getPixelsFromDps(100 , mContext) ;
 
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams( width , height  );
         imageView.setTag("lockIMG");

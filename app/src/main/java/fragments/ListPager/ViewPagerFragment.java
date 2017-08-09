@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 
 import fragments.BaseFragment;
-import touchevents.JMOnPageChange;
+import uievents.touchevents.JOnPageChange;
 
 /**
  * Created by Jordan on 5/11/2017.
@@ -32,7 +32,7 @@ public abstract class ViewPagerFragment extends BaseFragment  {
         mViewPager.setAdapter(adapter);
 
         mViewPager.setOffscreenPageLimit(offScreenLimit);
-        mViewPager.addOnPageChangeListener( new JMOnPageChange(  this ::  onPageChanged   )  );
+        mViewPager.addOnPageChangeListener( new JOnPageChange(  this ::  onPageChanged   )  );
 
         if(pageTransformer != null) mViewPager.setPageTransformer( false    ,  pageTransformer   );
         setCurrentItem( currentPosition  );

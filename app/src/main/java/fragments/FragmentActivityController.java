@@ -40,7 +40,7 @@ public class FragmentActivityController {
 
         if(backstackTag == null) return  openFirstFragment(transaction, fragmentToAdd)  ;
 
-        clearUnusedFragments();
+        if(fragManager.getFragments()!= null ) clearUnusedFragments();
 
         transaction.addToBackStack(newFragTag);
 
