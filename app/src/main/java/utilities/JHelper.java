@@ -20,4 +20,8 @@ import java.util.Random;
 
 public class JHelper {
 
+    public static void printError(Object err){
+        System.out.println(err);
+    }
+
 }

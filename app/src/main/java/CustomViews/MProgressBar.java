@@ -28,13 +28,10 @@ public class MProgressBar extends RelativeLayout {
     String progressTxt ;
     int progress ;
 
-
     // do not work colors are controlled in colors.xml for simplicity
     int fillColor = 0;
     // will be transaparent if not set
     int emptyColor = 0;
-
-
 
     public MProgressBar(@NonNull Context context) {
         super(context);

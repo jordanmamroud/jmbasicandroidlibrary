@@ -2,14 +2,20 @@ package viewsystem.ViewInstantiator;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.widget.Toast;
-
 import com.example.jordan.jmbasicandroidlibrary.R;
 
+import java.util.concurrent.Callable;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import utilities.ResourcesHelper;
 import viewsystem.Purchaseable;
 import utilities.ViewHelper;
 import viewsystem.IPurchaseSystem;
 
+import static android.content.Context.MODE_PRIVATE;
 import static viewsystem.ViewInstantiator.ViewInstantiatorHelper.BILLING_RESPONSE_RESULT_BILLING_UNAVAILABLE;
 
 /**
@@ -26,40 +32,35 @@ public class ViewUpdaterHelper implements IPurchaseSystem {
     public ViewUpdaterHelper(Context mContext, Purchaseable purchaseable, ViewInstantiatorHelper viewInstantiatorHelper) {
         this.mContext = mContext;
         this.viewInstantiatorHelper = viewInstantiatorHelper;
-        this.purchaseable = purchaseable;
+        this.purchaseable = purchaseable ;
     }
 
     @Override
-    public void requestPurchasedStatusAsync(    String purchaseKey  ){
-        this.purchaseToQuery =  purchaseKey ;
-        viewInstantiatorHelper.startSetup(  getSetupFinishedListener()  );
+    public void requestPurchasedStatusAsync(    String purchaseKey  ) {
+        this.purchaseToQuery = purchaseKey;
+        viewInstantiatorHelper.startSetup(  this    ::  handleSetupResult   );
     }
-    
-    private ViewInstantiatorHelper.OnIabSetupFinishedListener getSetupFinishedListener(){
-        return (PIabResult result)  ->  {
-            if (    result.isSuccess() ) checkIfUserHasMadePurchase();
-            else handleSetupError();
-        };
+
+    private void handleSetupResult(PIabResult result){
+        if (    result.isSuccess() ) checkIfUserHasMadePurchase();
+        else handleSetupError();
     }
-    
-    private void handleSetupError(){ showMessage(mContext.getString(   R.string.unableToConnectMsg    ));  }
-    
+
     private void checkIfUserHasMadePurchase(){
         try {
-            viewInstantiatorHelper.queryInventoryAsync(     onPurchaseQueryCompleted()   )  ;
+            viewInstantiatorHelper.queryInventoryAsync(     this :: handlePurchaseQueryCompleted      )  ;
         }catch (Exception e){
             showMessage(mContext.getString( R.string.queryErrorMsg   ));
         }
     }
-    
-    private ViewInstantiatorHelper.QueryInventoryFinishedListener onPurchaseQueryCompleted() {
-        return (PIabResult result, PInventory inventory) -> {
-            if (result.isFailure()) handleInventoryQueryError();
 
-            else postUpgradeStatus(  inventory.hasPurchase( purchaseToQuery  )    );
-        };
+    private void handleSetupError(){ showMessage(mContext.getString(   R.string.unableToConnectMsg    ));  }
+
+    private void handlePurchaseQueryCompleted(PIabResult result, PInventory inventory){
+        if (result.isFailure()) handleInventoryQueryError();
+        else postUpgradeStatus(  inventory.hasPurchase( purchaseToQuery  )    );
     }
-    
+
     private void handleInventoryQueryError(){   ViewHelper.showMessage(mContext ,mContext.getString(R.string.queryErrorMsg), Toast.LENGTH_SHORT);   }
 
     public void purchaseAttempt(){
@@ -85,13 +86,18 @@ public class ViewUpdaterHelper implements IPurchaseSystem {
         };
     }
 
+
+
     public void destroy(){  viewInstantiatorHelper.disposeEvenIfAsyncRunning(); }
 
     private void handlePurchaseAttemptError(){  showMessage( mContext.getString(R.string.purchaseFailedErrorMsg))       ;   }
 
     private void postPurchaseSuccessfulEvent(){     purchaseable.purchaseSuccessful();   }
 
-    private void postUpgradeStatus(boolean status   ){      purchaseable.onIsPurchasedResultReceived(status);    }
+    private void postUpgradeStatus(boolean status   ){
+        purchaseable.onPurchasedResultReceived(status);
+
+    }
 
     private void showMessage(String msg){ Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();}
 

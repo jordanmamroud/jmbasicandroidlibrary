@@ -1,5 +1,11 @@
 package busevents;
 
+import android.os.Bundle;
+
+import java.util.ArrayList;
+
+import io.reactivex.Observer;
+
 /**
  * Created by Jordan on 7/17/2017.
  */
@@ -28,6 +34,34 @@ public class CommonEvents {
         public boolean getTest(){return test ; };
     }
 
+    public static class ItemAdded{
+        Object addedItem ;
+
+        public ItemAdded(Object addedItem) {
+            this.addedItem = addedItem;
+        }
+
+        public Object getAddedItem(){return addedItem;}
+    }
+
+    public static class AddItems {
+        ArrayList listToAddTo;
+        int numOfItemsToAdd ;
+        Observer observer ;
+
+        public AddItems(ArrayList listToAddTo, int numOfItemsToAdd, Observer observer) {
+            this.listToAddTo = listToAddTo;
+            this.numOfItemsToAdd = numOfItemsToAdd;
+            this.observer = observer;
+        }
+
+        public ArrayList getListToAddTo() { return listToAddTo; }
+
+        public int getNumOfItemsToAdd() {   return numOfItemsToAdd; }
+
+        public Observer getObserver() { return observer;    }
+    }
+
     // ie viewpager position gets changed
     public static class PositionChange{
         int position ;
@@ -43,6 +77,7 @@ public class CommonEvents {
 
     public static class FragmentChangeRequest {
         private String fragmentToLaunch ;
+        private Bundle extras ;
         // only used for items clicked in lists
         private Object extraInfo;
 
@@ -57,6 +92,10 @@ public class CommonEvents {
             this.extraInfo = extraInfo ;
             return this ;
         }
+
+        public Bundle getExtras() { return extras;}
+
+        public void setExtras(Bundle extras) {  this.extras = extras;   }
 
         public String getFragmentToLaunchId(){
             return fragmentToLaunch;

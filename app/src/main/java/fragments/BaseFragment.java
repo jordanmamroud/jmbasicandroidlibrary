@@ -16,4 +16,5 @@ public abstract class  BaseFragment extends Fragment  implements Observer{
 
     @Override
     public void update(Observable o, Object arg) {}
+
 }

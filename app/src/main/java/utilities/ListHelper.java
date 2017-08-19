@@ -1,13 +1,23 @@
 package utilities;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by Jordan on 8/3/2017.
  */
 
-public class ListBuilder {
+public class ListHelper {
 
     public static ArrayList getRandomItemsFromList(ArrayList<String> list , int numOfItemsToGet){
         ArrayList<String> items = new ArrayList<>();
@@ -22,7 +32,6 @@ public class ListBuilder {
         }
         return items;
     }
-
 
     public static ArrayList getRandomItemsWithOnePreSet(int numOfItems, ArrayList listToGetFrom , Object preSetListItem){
         ArrayList  items = new ArrayList<>();

@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.jordan.jmbasicandroidlibrary.R;
-import utilities.ListBuilder;
+import utilities.ListHelper;
 
 import java.util.ArrayList;
 
@@ -43,7 +43,7 @@ public class JSpinnerAdapter extends ArrayAdapter {
     }
 
     public JSpinnerAdapter createRandomOptions (ArrayList  itemsToChooseFrom , @Nullable Object presetItem){
-        ArrayList optionsToChoose = ListBuilder.getRandomItemsWithOnePreSet(numOfItems , itemsToChooseFrom , presetItem);
+        ArrayList optionsToChoose = ListHelper.getRandomItemsWithOnePreSet(numOfItems , itemsToChooseFrom , presetItem);
         addItems(optionsToChoose);
         return this ;
     }

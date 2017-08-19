@@ -16,12 +16,19 @@ public class ViewHelper {
     public static void showMessage(Context context, String message, int length){
         Toast.makeText(context , message , length).show();
     }
+
     public static void showToastAtCustomPosition(Context context, String msg, int toastLength , int gravity){
         Toast toast = Toast.makeText(context, msg, toastLength);
         toast.setGravity(gravity, 0 , 0 );
         toast.show();
     }
 
+    public static void disable(View... views){
+        for ( View v : views) {
+            v.setEnabled(false);
+            v.setClickable(false);
+        }
+    }
     public static void setViewsClickability(boolean clickable, View... views){
         for(View v : views){
             v.setClickable(clickable);
@@ -36,21 +43,56 @@ public class ViewHelper {
         }
     }
 
+    public static void setVisibility(int visibility, View... views){
+        for (View v : views)    {
+            v.setVisibility(visibility);
+        }
+    }
+
+    public static void toggleViewVisbility(View view){
+        if(view.getVisibility() != View.VISIBLE){
+            setVisibilityAndClickability(view, true);
+        }else {
+            setVisibilityAndClickability(view, false);
+        }
+    }
+
+    public static void setVisibilityAndClickability(View view   , boolean isVisible){
+        int visible ;
+        visible = isVisible ? View.VISIBLE : View.GONE ;
+        view.setVisibility(visible);
+        view.setEnabled(isVisible);
+        view.setClickable(isVisible);
+    }
+
     public static void removeViews(  View... views){
         for (View v : views)    {
             v.setVisibility(View.GONE);
             v.setClickable(false);
+            v.setEnabled(false);
+        }
+    }
+
+    public static void restoreViews(  View... views){
+        for (View v : views)    {
+            v.setVisibility(View.VISIBLE);
+            v.setClickable(true);
+            v.setEnabled(true);
         }
     }
 
     public static void hideViews(View... views){
-        for (View v : views) v.setVisibility(View.INVISIBLE);
+        for (View v : views) {
+            v.setVisibility(View.INVISIBLE);
+            v.setClickable(false);
+            v.setEnabled(false);
+        }
     }
 
     public static void showViews( View... views){
         for (View v : views){
-
             v.setClickable(true);
+            v.setEnabled(false);
             v.setVisibility(View.VISIBLE);
         }
     }

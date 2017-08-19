@@ -5,6 +5,7 @@ import android.animation.AnimatorInflater;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.View;
 
 import com.example.jordan.jmbasicandroidlibrary.R;
@@ -23,18 +24,25 @@ public class LayoutFlipController {
     private View backLayout ;
     private boolean mIsBackVisible ;
     private boolean mIsRunning ;
-    private IOnFlipToFront  iOnFlipToFront ;
-    private IOnFlipToBack iOnFlipToBack ;
 
-    public LayoutFlipController(Context mContext, View frontLayout , View backLayout) {
+
+    public LayoutFlipController(Context mContext ) {
+        this.mContext = mContext ;
+        loadAnimations();
+    }
+
+    public LayoutFlipController setupLayoutsToFlip(View frontLayout , View backLayout){
         this.frontLayout = frontLayout ;
         this.backLayout = backLayout ;
-        this.mContext = mContext ;
         // if this is not done + hardware accelerated in manifest then flip animation will flicker back views.
         frontLayout.setLayerType(View.LAYER_TYPE_HARDWARE,  null);
         backLayout.setLayerType(View.LAYER_TYPE_HARDWARE,   null);
-        loadAnimations();
-        setupFlipLayouts();
+
+        int distance = 8000;
+        float scale = mContext.getResources().getDisplayMetrics().density * distance;
+        frontLayout.setCameraDistance(scale);
+        backLayout.setCameraDistance(scale);
+        return this ;
     }
 
     public void loadAnimations(){
@@ -59,23 +67,14 @@ public class LayoutFlipController {
         };
     }
 
-    public void setupFlipLayouts(){
-        int distance = 8000;
-        float scale = mContext.getResources().getDisplayMetrics().density * distance;
-        frontLayout.setCameraDistance(scale);
-        backLayout.setCameraDistance(scale);
-    }
-
     public void flipIfNotFlipping(){     if( !   mIsRunning ) flipLayouts();        }
 
     private void flipLayouts(){
         mIsRunning = false ;
         // passing in oppositite of what it is because thats what it will be .
         if (!mIsBackVisible) {
-            if (iOnFlipToBack != null) iOnFlipToBack.startFlip();
             flipToBack();
         } else {
-            if (iOnFlipToFront != null) iOnFlipToFront.startFlip();
             flipToFront();
         }
     }
@@ -98,7 +97,6 @@ public class LayoutFlipController {
         mSetLeftIn.setTarget(frontLayout);
         mSetRightOut.start();
         mSetLeftIn.start();
-
     }
 
     public void cancelAnimations(){
@@ -108,26 +106,28 @@ public class LayoutFlipController {
         }
     }
 
-    public boolean isIsBackVisible() {
-        return mIsBackVisible;
+    public void saveState(Bundle outState){
+        outState.putBoolean("isBackShowing", isFlipped()   );
     }
+
+    public void restoreFlippedState(Bundle savedInstanceState){
+        if(savedInstanceState.getBoolean("isBackShowing")   ) restoreBackLayout();
+    }
+
+    private void restoreBackLayout(){
+        frontLayout.setVisibility(View.INVISIBLE);
+        backLayout.setVisibility(View.VISIBLE);
+        backLayout.bringToFront();
+        setIsBackVisible(true);
+    }
+
+    public boolean isFlipped() {    return mIsBackVisible;  }
 
     public void setIsBackVisible(boolean visible){ this.mIsBackVisible = visible ;}
 
-    public LayoutFlipController setOnFlipToFrontListener(IOnFlipToFront listener){
-        this.iOnFlipToFront = listener;
-        return this ;
-    }
 
-    public LayoutFlipController setOnFlipToBackListener(IOnFlipToBack listener){
-        this.iOnFlipToBack = listener;
-        return this;
-    }
 
     public void setAnimationListener(AnimatorListenerAdapter animationListener){ mSetLeftIn.addListener( animationListener   ); }
 
-    public interface IOnFlipToFront{ void startFlip ();  }
-
-    public interface IOnFlipToBack { void startFlip();  }
 
 }

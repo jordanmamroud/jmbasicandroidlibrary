@@ -27,6 +27,7 @@ public class AnimationBuilder {
         animator.prepare(   viewToPrep ) ;
         viewToPrep.setClickable(true);
         viewToPrep.setVisibility(View.VISIBLE)   ;
+        viewToPrep.setEnabled(true);
     }
 
     private AnimatorListenerAdapter getDefaultInAnimationEvents(){
@@ -37,21 +38,25 @@ public class AnimationBuilder {
 
     private void prepareSingleOutAnimationView(View viewToPrep){
         viewToPrep.setClickable(    false   );
+        viewToPrep.setEnabled(false);
         animator.prepare(   viewToPrep );
     }
 
     private AnimatorListenerAdapter getDefaultOutAnimationEvents( ) {
         return new AnimatorListenerAdapter() {
             @Override
-            public void onAnimationEnd(Animator animation) {    if (!keepViewsInLayout) removeViewsFromLayout();    }
+            public void onAnimationEnd(Animator animation) {     removeViewsFromLayout();    }
 
             @Override
-            public void onAnimationCancel(Animator animation) {     if (!keepViewsInLayout) removeViewsFromLayout();        }
+            public void onAnimationCancel(Animator animation) {       removeViewsFromLayout();        }
         };
     }
 
     private void removeViewsFromLayout(){
-        for (View v : viewsToAnimate)     if(!keepViewsInLayout) v.setVisibility(View.GONE)   ;
+        for (View v : viewsToAnimate)    {
+            int visibility = keepViewsInLayout ? View.INVISIBLE : View.GONE ;
+            v.setVisibility(visibility);
+        }
     }
 
     // shared methods
@@ -63,7 +68,6 @@ public class AnimationBuilder {
     }
 
     public void startAnimation(){ animator.animate(); }
-
 
     private void prepareAnimation(){
         if( duration != 0     )     animator.setDuration(duration) ;

@@ -16,14 +16,22 @@
     </style>
     
     <style name="AppTheme.Button" parent="Widget.AppCompat.Button">
-         <item name="android:layout_margin">10dp</item>
+          <item name="android:layout_marginLeft">5dp</item>
+         <item name="android:layout_marginRight">5dp</item>
+         <item name="android:layout_marginBottom">5dp</item>
+         <item name="android:layout_marginTop">5dp</item>
          <item name="backgroundTint">@color/colorAccent</item>
          <item name="android:textColor">@color/textColorPrimary</item>
+         <item name="android:paddingLeft">40dp</item>
+         <item name="android:paddingRight">40dp</item>
          <item name="android:layout_height">60dp</item>
          <item name="android:layout_width">wrap_content</item>
      </style>
 
-    <style name="AppTheme.Button.Colored" parent="AppTheme.Button"> <item name="android:textColor">@color/colorAccent</item> </style>
+    <style name="AppTheme.Button.Colored" parent="AppTheme.Button">
+        <item name="backgroundTint">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorAccentText</item>
+    </style>
 
     <style name="AppTheme.Button.HomeButton" parent="AppTheme.Button">
         <item name="backgroundTint">#fff</item>
@@ -43,8 +51,8 @@
 
     <style name="AppTheme.HeaderView">
         <item name="android:textSize">@dimen/mMediumText</item>
-        <item name="android:paddingLeft">10dp</item>
-        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
         <item name="android:textColor">@color/appbarViewsColor</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -63,7 +71,7 @@
 
     <style name="AppTheme.ScrollView">
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:scrollbarThumbVertical">@drawable/custom_scrollview_thumb</item>
         <item name="android:scrollbarTrackVertical">@drawable/custom_scrollview_track</item>
         <item name="android:scrollbarStyle">insideInset</item>
@@ -107,6 +115,56 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:alpha">.3</item>
         <item name="android:background">#414141</item>
+    </style>
+
+    <!-- locked layout sytles -->
+
+    <style name="AppTheme.UpgradeBtn" parent="AppTheme.Button.Colored">
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <!-- component picture view -->
+    <style name="PictureView"></style>
+    <style name="PictureView.Background"><item name="android:background">#fff</item>  </style>
+    <style name="PictureView.MainImage"></style>
+
+    <!-- component info view -->
+    <style name="InfoView"></style>
+    <style name="InfoView.Background"><item name="android:background">#fff</item></style>
+    <style name="InfoView.Image">
+        <item name="android:alpha">.2</item>
+        <item name="android:layout_centerInParent">true</item>
+    </style>
+
+    <!--  cv_switcher   -->
+    <style name="SwitcherLabel">
+        <item name="android:textColor">#000</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:textSize">@dimen/mMediumText</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <style name="SwitcherRevealBtn" parent="AppTheme.Button.Colored">
+        <item name="android:textSize">@dimen/mMediumText</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:text">Reveal</item>
+        <item name="android:layout_marginBottom">0dp</item>
+        <item name="android:layout_marginTop">0dp</item>
+
+    </style>
+
+    <style name="SwitcherHiddenText">
+        <item name="android:layout_height">50dp</item>
+        <item name="android:textSize">@dimen/mMediumText</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
 </resources>

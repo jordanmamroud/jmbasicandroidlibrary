@@ -10,7 +10,7 @@ public class StringHelper {
         return stringToSplit.split("(?!^)");
     }
 
-    public static boolean compareString(String one , String two){
+    public static boolean compare(String one , String two){
         return one.toLowerCase().trim().equals(two.toLowerCase());
     }
 

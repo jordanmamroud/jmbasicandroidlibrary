@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -20,24 +21,10 @@ public abstract class JFragmentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
         isRestarted = savedInstanceState != null     ;
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if(! EventBus.getDefault().isRegistered(this)   ) EventBus.getDefault().register(this);
-
-    }
-
     public abstract void launchStartFragment();
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
 
     public void updateObserverFragments(Object object){
         for(Fragment fragment: getSupportFragmentManager().getFragments()) {
@@ -46,6 +33,8 @@ public abstract class JFragmentActivity extends AppCompatActivity {
             }
         }
     }
+
+    public void showMessage(String message){    Toast.makeText(JFragmentActivity.this, message, Toast.LENGTH_SHORT).show(); }
 
     private boolean isObserver(Fragment fragment ){ return fragment instanceof Observer ; }
 

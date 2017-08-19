@@ -1,12 +1,15 @@
 package fragments.ListPager;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
-
-import java.util.ArrayList;
-import java.util.Observable;
 
 import fragments.BaseFragment;
 import uievents.touchevents.JOnPageChange;
@@ -17,42 +20,45 @@ import uievents.touchevents.JOnPageChange;
 
 public abstract class ViewPagerFragment extends BaseFragment  {
 
-    // default values
-    private int currentPosition = 0;
+    private int currentPosition = 0 ;
     private ViewPager mViewPager ;
-    private ViewPagerAdapter adapter;
-
 
     // would use this in large list of items to avoid having viewpager scroll through to reach items and create unused fragments
     private boolean createNewInstanceEachTime = true;
 
-    public void setupPager(ViewPager viewPager, int offScreenLimit, ViewPager.PageTransformer pageTransformer){
+    public void setViewPager(ViewPager viewPager, ViewPagerAdapter adapter){
         this.mViewPager = viewPager;
-        this.adapter = new ViewPagerAdapter(getChildFragmentManager() , getListOfItems() , initItemFragInstance() );
+        mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(adapter);
-
-        mViewPager.setOffscreenPageLimit(offScreenLimit);
         mViewPager.addOnPageChangeListener( new JOnPageChange(  this ::  onPageChanged   )  );
-
-        if(pageTransformer != null) mViewPager.setPageTransformer( false    ,  pageTransformer   );
-        setCurrentItem( currentPosition  );
     }
 
-    // any subclass must have these two methods
-    public abstract  ViewPagerItemFragment initItemFragInstance() ;
+    public void onPageChanged(int position){    this.currentPosition = position;    }
 
-    public abstract ArrayList getListOfItems();
-
-    public void onPageChanged(int position){
-        this.currentPosition = position;
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+         if(savedInstanceState != null) currentPosition = savedInstanceState.getInt("position");
+         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    public void moveNext() { mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1); }
+    public void moveNext() {
+        this.currentPosition = mViewPager.getCurrentItem() + 1 ;
+        mViewPager.setCurrentItem(currentPosition);
+    }
 
-    public void movePrevious() { mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1); }
+    public void movePrevious() {
+        this.currentPosition =  mViewPager.getCurrentItem() - 1 ;
+        mViewPager.setCurrentItem(currentPosition);
+    }
+
+    public Fragment getCurrentFragment() {
+        return (Fragment) mViewPager.getAdapter().instantiateItem(mViewPager, mViewPager.getCurrentItem());
+    }
 
     // this needs work not happy with this solution but will continue working on it does  job for now
     public void setCurrentItem( int position ) {
+        this.currentPosition = position;
         if( createNewInstanceEachTime) {
             mViewPager.setCurrentItem(  position   );
         }else {
@@ -64,20 +70,13 @@ public abstract class ViewPagerFragment extends BaseFragment  {
         mViewPager.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                System.out.println("global layout listener ran");
                 mViewPager.setCurrentItem(  position,   true    );
                 mViewPager.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
     }
 
-
-    @Override
-    public void update(Observable o, Object arg) {
-        if(adapter != null)    adapter.notifyDataSetChanged();
-    }
-
-    public void restore(Bundle savedInstanceState){ if(savedInstanceState != null) currentPosition = savedInstanceState.getInt("savedPosition");}
+    public void restorePosition(Bundle savedInstanceState){ currentPosition = savedInstanceState.getInt("position");}
 
     public int getCurrentPosition(){
          return currentPosition ;
@@ -87,14 +86,9 @@ public abstract class ViewPagerFragment extends BaseFragment  {
 
     public ViewPager getViewPager(){ return mViewPager; }
 
-    public ViewPagerAdapter getAdapter(){ return adapter ; }
-
-    public int getCount(){return adapter.getCount();}
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-         outState.putInt("savedPosition", mViewPager.getCurrentItem());
+        outState.putInt("position" , mViewPager.getCurrentItem()    );
     }
-
 }

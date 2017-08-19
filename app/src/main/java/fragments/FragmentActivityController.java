@@ -9,16 +9,23 @@ import com.example.jordan.jmbasicandroidlibrary.R;
 
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.schedulers.Schedulers;
+
+
 /**
  * Created by Jordan on 7/27/2017.
  */
 
 public class FragmentActivityController {
 
-    FragmentManager fragManager ;
-    ViewGroup fragmentContainer ;
-    String backstackTag ;
-    //default values ;
+    private FragmentManager fragManager ;
+    private ViewGroup fragmentContainer ;
+
+     //default values ;
     int animIn = R.anim.fade_in ;
     int animOut = R.anim.fade_out;
     int backstackLimit = 2;
@@ -29,10 +36,8 @@ public class FragmentActivityController {
     }
 
     public FragmentTransaction createFragmentTransaction(   Fragment fragmentToAdd, String newFragTag  , String backstackTag    ){
-        if (fragManager.getFragments() != null){
-            System.out.println( fragManager.getFragments().size())   ;
-        }
-        fragmentContainer.removeAllViewsInLayout();
+
+        if(fragmentContainer!=null) fragmentContainer.removeAllViewsInLayout();
 
         FragmentTransaction transaction =   fragManager.beginTransaction();
 
@@ -40,7 +45,9 @@ public class FragmentActivityController {
 
         if(backstackTag == null) return  openFirstFragment(transaction, fragmentToAdd)  ;
 
-        if(fragManager.getFragments()!= null ) clearUnusedFragments();
+        if( hasUnusedFragments()    )   {
+            Observable.create((@NonNull ObservableEmitter<Object> e)-> {    clearUnusedFragments(); }).subscribeOn(Schedulers.newThread()).subscribe()  ;
+        }
 
         transaction.addToBackStack(newFragTag);
 
@@ -51,9 +58,10 @@ public class FragmentActivityController {
         return transaction ;
     }
 
+    private boolean hasUnusedFragments(){   return  fragManager.getFragments()!= null && fragManager.getFragments().size() > backstackLimit  ; }
+
     private void clearUnusedFragments(){
         List<Fragment> fragmentList = fragManager.getFragments();
-
         for(int i = 0;  i   < fragmentList.size() ; i++){
             Fragment fragment  = fragManager.getFragments().get(i) ;
             if(fragment == null) {

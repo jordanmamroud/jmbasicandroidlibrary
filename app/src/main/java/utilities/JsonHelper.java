@@ -8,16 +8,27 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by Jordan on 7/21/2017.
  */
 
 public class JsonHelper {
-    public static JSONArray loadJSONFromAsset(Context context , String filelocation , String arrayName) {
 
+    public static JSONArray loadJSONFromAsset(Context context , String filelocation , String arrayName)  {
+        return readJsonFile(context, filelocation, arrayName) ;
+    }
+
+    private static JSONArray readJsonFile(Context context , String filelocation , String arrayName)  {
         String json = null;
-
+        JSONArray jsonObject = null ;
         try {
             InputStream is = context.getAssets().open(filelocation);
             int size = is.available();
@@ -25,20 +36,20 @@ public class JsonHelper {
             is.read(buffer);
             is.close();
             json = new String(buffer, "UTF-8");
-
         } catch (IOException ex) {
+            JHelper.printError("Error reading json in JsonHelper");
             ex.printStackTrace();
             return null;
         }
         try {
-            JSONObject obj = new JSONObject(json);
-
-            return obj.getJSONArray(arrayName);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
+            jsonObject =  new JSONObject(json).getJSONArray(arrayName);
+        }catch (JSONException e){
+            JHelper.printError("Error reading json in JsonHelper");
         }
 
-        return null;
+        return jsonObject ;
     }
+
+
+
 }

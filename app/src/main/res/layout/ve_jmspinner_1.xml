@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<builtinviewextensions.spinner.JmSpinner
+<builtinviewextensions.spinner.JSpinner
     android:layout_width="250dp"
     android:layout_height="wrap_content"
     android:layout_centerHorizontal="true"
@@ -7,4 +7,4 @@
     android:layout_marginBottom="10dp"
      xmlns:android="http://schemas.android.com/apk/res/android">
 
-</builtinviewextensions.spinner.JmSpinner>
+</builtinviewextensions.spinner.JSpinner>

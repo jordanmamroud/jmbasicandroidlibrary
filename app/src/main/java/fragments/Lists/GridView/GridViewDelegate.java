@@ -41,6 +41,7 @@ public class GridViewDelegate implements IAdapterDelegates {
         this.glideManager = glideManager ;
         this.allUnlocked = allUnlocked ;
     }
+
     @Override
     public void onBindViewHolder(ArrayList itemsList, RecyclerView.ViewHolder holder, int position) {
         GridViewHolder mHolder = (GridViewHolder) holder ;
@@ -76,8 +77,7 @@ public class GridViewDelegate implements IAdapterDelegates {
     @Override
     public void update(Object obj) {
         // show all images if they are locked
-        System.out.println("update gridview delegate");
-        if ( obj instanceof  Boolean )      allUnlocked =   true ;
+        if ( obj instanceof  Boolean )   allUnlocked =   true ;
     }
 
     @Override

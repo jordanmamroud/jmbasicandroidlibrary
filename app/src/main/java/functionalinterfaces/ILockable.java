@@ -6,4 +6,5 @@ package functionalinterfaces;
 
 public interface ILockable {
     boolean isLocked();
+    void setLocked(boolean locked);
 }

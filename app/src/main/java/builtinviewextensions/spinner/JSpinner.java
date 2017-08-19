@@ -5,6 +5,7 @@ import android.support.v7.widget.AppCompatSpinner;
 import android.util.AttributeSet;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 /**
  * Created by Jordan on 7/25/2017.
@@ -26,7 +27,7 @@ public class JSpinner extends AppCompatSpinner {
     }
 
     public void setOnItemSelectedEvenIfUnchangedListener(
-            AdapterView.OnItemSelectedListener listener) {
+        AdapterView.OnItemSelectedListener listener) {
         this.listener = listener;
     }
 
@@ -35,4 +36,8 @@ public class JSpinner extends AppCompatSpinner {
          clearAnimation();
     }
 
+    @Override
+    public JSpinnerAdapter getAdapter() {
+        return (JSpinnerAdapter) super.getAdapter();
+    }
 }

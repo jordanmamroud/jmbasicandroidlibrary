@@ -6,5 +6,5 @@ package viewsystem;
 
 public interface Purchaseable {
     void purchaseSuccessful();
-    void onIsPurchasedResultReceived(boolean isPurchased);
+    void onPurchasedResultReceived(boolean isPurchased);
 }
