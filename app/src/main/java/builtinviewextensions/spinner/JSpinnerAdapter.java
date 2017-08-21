@@ -25,8 +25,6 @@ public class JSpinnerAdapter extends ArrayAdapter {
     String label = null;
     ArrayList  allItems = new ArrayList<>();
     Context context ;
-
-    boolean createRandomOptions ;
     int numOfItems = 5 ;
     int labelTextSize = 20 ;
 
@@ -40,6 +38,12 @@ public class JSpinnerAdapter extends ArrayAdapter {
         this.context = context;
         this.label = label ;
         addItems(items);
+    }
+
+
+    @Override
+    public void clear() {
+        allItems.clear();
     }
 
     public JSpinnerAdapter createRandomOptions (ArrayList  itemsToChooseFrom , @Nullable Object presetItem){

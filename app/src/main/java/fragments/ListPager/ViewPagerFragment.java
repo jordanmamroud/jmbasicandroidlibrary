@@ -22,24 +22,33 @@ public abstract class ViewPagerFragment extends BaseFragment  {
 
     private int currentPosition = 0 ;
     private ViewPager mViewPager ;
-
+    private ViewPagerAdapter adapter ;
     // would use this in large list of items to avoid having viewpager scroll through to reach items and create unused fragments
     private boolean createNewInstanceEachTime = true;
 
-    public void setViewPager(ViewPager viewPager, ViewPagerAdapter adapter){
-        this.mViewPager = viewPager;
+    public void attachViewPager(ViewPager viewPager, ViewPagerAdapter adapter){
+        this.mViewPager = viewPager ;
+        this.adapter = adapter ;
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(adapter);
         mViewPager.addOnPageChangeListener( new JOnPageChange(  this ::  onPageChanged   )  );
     }
 
-    public void onPageChanged(int position){    this.currentPosition = position;    }
+    public void onPageChanged(int position){
+        this.currentPosition = position;
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
          if(savedInstanceState != null) currentPosition = savedInstanceState.getInt("position");
          return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if( mViewPager == null  )   throw new IllegalStateException("viewpager was never attached to superclass viewpager fragment");
     }
 
     public void moveNext() {
@@ -56,7 +65,7 @@ public abstract class ViewPagerFragment extends BaseFragment  {
         return (Fragment) mViewPager.getAdapter().instantiateItem(mViewPager, mViewPager.getCurrentItem());
     }
 
-    // this needs work not happy with this solution but will continue working on it does  job for now
+    // this needs work not happy with this solution but will continue working on it does  job for now.
     public void setCurrentItem( int position ) {
         this.currentPosition = position;
         if( createNewInstanceEachTime) {
@@ -76,15 +85,25 @@ public abstract class ViewPagerFragment extends BaseFragment  {
         });
     }
 
-    public void restorePosition(Bundle savedInstanceState){ currentPosition = savedInstanceState.getInt("position");}
-
-    public int getCurrentPosition(){
-         return currentPosition ;
+    public void setCreateNewInstanceEachTime(boolean createNewInstanceEachTime){
+        this.createNewInstanceEachTime = createNewInstanceEachTime ;
     }
 
-    public void setCurrentPosition(int currentPosition) { this.currentPosition = currentPosition; }
+    public int getCurrentPosition(){
+        return currentPosition ;
+    }
 
-    public ViewPager getViewPager(){ return mViewPager; }
+    public void setCurrentPosition(int currentPosition) {
+        this.currentPosition = currentPosition;
+    }
+
+    public boolean isChildFragManagerAttached(){
+        return  getChildFragmentManager() !=null &&  getChildFragmentManager().getFragments()!= null ;
+    }
+
+    public void notifyDataSetChanged(){
+        adapter.notifyDataSetChanged();
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

@@ -28,4 +28,8 @@ public class MathHelper {
 
     public static boolean isNumEven(int n){     return n % 2 == 0 ;     }
 
+    public static int calculateSpace(int marginRightPlusLeft , int numOfViews, int totalAvailableWidth ){
+        return (totalAvailableWidth/ numOfViews)   - marginRightPlusLeft ;
+    }
+
 }

@@ -8,6 +8,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -30,16 +31,22 @@ public class RxHelper {
         return Observable.create(    runonsubscribe      ).subscribeOn( subscribeOn  ).observeOn(observeOn);
     }
 
-    public static void subcribe(Observable<Object> observable , Consumer<Object> onNext , @Nullable Action onComplete){
+    public static Disposable subcribe(Observable<Object> observable , Consumer<Object> onNext , @Nullable Action onComplete){
         if( onComplete == null ) {
-            observable.subscribe(onNext) ;
+            return observable.subscribe(onNext) ;
         }else {
             Consumer<Object> onError = JHelper ::  printError   ;
-            observable.subscribe(onNext , onError    ,   onComplete) ;
+            return observable.subscribe(onNext , onError    ,   onComplete);
         }
     }
 
-    public static void subcribe(Observable<Object> observable , Consumer<Object> onNext  ){ observable.subscribe(onNext      ) ;    }
+    public static Disposable subscribe(Observable observable){
+        return observable.subscribeOn( Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe() ;
+    }
+
+    public static Disposable subcribe(Observable<Object> observable , Consumer<Object> onNext  ){
+        return observable.subscribe(onNext      ) ;
+    }
 
     public static void subcribe(Observable<Object> observable , Consumer<Object> onNext , Consumer<Object> onerr ,@NonNull Action onComplete){
         // only setting if null because passing null would throw error if not done.

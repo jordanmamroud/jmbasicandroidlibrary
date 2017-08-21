@@ -29,11 +29,7 @@ public class ViewHelper {
             v.setClickable(false);
         }
     }
-    public static void setViewsClickability(boolean clickable, View... views){
-        for(View v : views){
-            v.setClickable(clickable);
-        }
-    }
+    public static void setViewsClickability(boolean clickable, View... views){  for(View v : views) v.setClickable(clickable);  }
 
     public static boolean isViewVisible(View view){
         if(view.getVisibility() == View.VISIBLE){
@@ -44,9 +40,7 @@ public class ViewHelper {
     }
 
     public static void setVisibility(int visibility, View... views){
-        for (View v : views)    {
-            v.setVisibility(visibility);
-        }
+        for (View v : views)    v.setVisibility(visibility);
     }
 
     public static void toggleViewVisbility(View view){
@@ -81,31 +75,38 @@ public class ViewHelper {
         }
     }
 
+    public static void setVisibility( boolean isVisible, View... views){
+        int visibility =  isVisible ? View.VISIBLE : View.INVISIBLE ;
+        for ( View v : views ){
+            setEnabled(isVisible, v );
+            v.setVisibility(  visibility   );
+        }
+    }
+
     public static void hideViews(View... views){
         for (View v : views) {
             v.setVisibility(View.INVISIBLE);
-            v.setClickable(false);
-            v.setEnabled(false);
+            setEnabled( false , v );
         }
     }
 
     public static void showViews( View... views){
         for (View v : views){
-            v.setClickable(true);
-            v.setEnabled(false);
+            setEnabled( true , v    );
             v.setVisibility(View.VISIBLE);
         }
     }
 
-    public static int calculateSpace(int marginRightPlusLeft , int numOfViews, int totalAvailableWidth ){
-        return (totalAvailableWidth/ numOfViews)   - marginRightPlusLeft ;
+    private static void setEnabled(boolean enabled, View v ){
+        v.setClickable(enabled);
+        v.setEnabled(enabled);
     }
+
 
     // call getToken on view to get windowtoken
     public static void hideKeyboard(Context context , IBinder windowToken){
         InputMethodManager mgr = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow( windowToken , 0);
-
     }
 
 }

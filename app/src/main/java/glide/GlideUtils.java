@@ -1,6 +1,7 @@
 package glide;
 
 import android.content.Context;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
@@ -33,23 +34,29 @@ public class GlideUtils {
         if( view.getHeight() > 0 && view.getWidth() > 0 ){
             imgFormation.override( view.getHeight() / downScale , view.getWidth() / downScale);
             setImage(imgFormation,  view, cache );
+
         }else {
             // returning true for proeceeding with drawing pass only if view has been measured
-            ViewTreeObserver.OnPreDrawListener listener = new ViewTreeObserver.OnPreDrawListener() {
+            ViewTreeObserver.OnGlobalLayoutListener listener = new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
-                public boolean onPreDraw() {
-                    //must be removed here or will freeze on failed measures
-                    view.getViewTreeObserver().removeOnPreDrawListener(this);
+                public void onGlobalLayout() {
                     if( view.getWidth() != 0 && view.getHeight() != 0) {
-
-                        imgFormation.override(view.getWidth() / downScale , view.getHeight() / downScale);
+                        imgFormation.override(view.getWidth() / downScale, view.getHeight() / downScale);
                         setImage(imgFormation, view, cache);
                     }
-                    return true;
                 }
             };
 
-            view.getViewTreeObserver().addOnPreDrawListener( listener );
+            view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    if( view.getWidth() != 0 && view.getHeight() != 0) {
+                        imgFormation.override(view.getWidth() / downScale, view.getHeight() / downScale);
+                        setImage(imgFormation, view, cache);
+                        view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    }
+                }
+            });
         }
     }
 

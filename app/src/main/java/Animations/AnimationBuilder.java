@@ -19,9 +19,13 @@ public class AnimationBuilder {
     int duration = 0 ;
     boolean isInAnimation ;
 
-    public AnimationBuilder(BaseViewAnimator animator) { this.animator = animator; }
+    public AnimationBuilder(BaseViewAnimator animator) {
+        this.animator = animator;
+    }
 
-    public void animateIn(){         animate( true  );           }
+    public void animateIn(){
+        animate( true  );
+    }
 
     private void prepareSingleInAnimationView(View viewToPrep){
         animator.prepare(   viewToPrep ) ;
@@ -67,20 +71,10 @@ public class AnimationBuilder {
         startAnimation();
     }
 
-    public void startAnimation(){ animator.animate(); }
-
     private void prepareAnimation(){
         if( duration != 0     )     animator.setDuration(duration) ;
         addEventListener(  eventListener  );
         prepareViews();
-    }
-
-    private void prepareViews(){
-        if( isInAnimation){
-            for(    View viewToPrep : viewsToAnimate )  prepareSingleInAnimationView( viewToPrep );
-        }else {
-            for(    View viewToPrep : viewsToAnimate )  prepareSingleOutAnimationView( viewToPrep );
-        }
     }
 
     private void addEventListener(AnimatorListenerAdapter listener){
@@ -91,9 +85,21 @@ public class AnimationBuilder {
         }
     }
 
-    private boolean useDefaultAnimationEvents() { return eventListener == null;  }
+    private boolean useDefaultAnimationEvents() {
+        return eventListener == null;
+    }
 
-    // getters / setters
+    private void prepareViews(){
+        if( isInAnimation){
+            for(    View viewToPrep : viewsToAnimate )  prepareSingleInAnimationView( viewToPrep );
+        }else {
+            for(    View viewToPrep : viewsToAnimate )  prepareSingleOutAnimationView( viewToPrep );
+        }
+    }
+
+    public void startAnimation(){
+        animator.animate();
+    }
 
     public AnimationBuilder dontKeepViewsInLayout() {
         this.keepViewsInLayout = false;

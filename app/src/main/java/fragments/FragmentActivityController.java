@@ -14,6 +14,7 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.schedulers.Schedulers;
+import utilities.RxHelper;
 
 
 /**
@@ -45,29 +46,32 @@ public class FragmentActivityController {
 
         if(backstackTag == null) return  openFirstFragment(transaction, fragmentToAdd)  ;
 
-        if( hasUnusedFragments()    )   {
-            Observable.create((@NonNull ObservableEmitter<Object> e)-> {    clearUnusedFragments(); }).subscribeOn(Schedulers.newThread()).subscribe()  ;
+        if(     hasUnusedFragments()    )   {
+            Observable observable =   RxHelper.createObservable(( ObservableEmitter<Object> e    )-> {    clearUnusedFragments(); }  ) ;
+            RxHelper.subscribe(observable);
         }
 
         transaction.addToBackStack(newFragTag);
 
         transaction.replace(fragmentContainer.getId(), fragmentToAdd, newFragTag);
 
-        if( isBackStackFull()  ) popBackStackProperly();
+//        if( isBackStackFull()  ) popBackStackProperly();
 
         return transaction ;
     }
 
-    private boolean hasUnusedFragments(){   return  fragManager.getFragments()!= null && fragManager.getFragments().size() > backstackLimit  ; }
+    private boolean hasUnusedFragments(){
+        return  fragManager.getFragments()!= null && fragManager.getFragments().size() > backstackLimit + 1 ;
+    }
 
     private void clearUnusedFragments(){
         List<Fragment> fragmentList = fragManager.getFragments();
+        System.out.println(fragmentList.size()) ;
         for(int i = 0;  i   < fragmentList.size() ; i++){
             Fragment fragment  = fragManager.getFragments().get(i) ;
-            if(fragment == null) {
-                System.out.println("fragment trying to remove is null in fragment activity controller ");
-            }else if(   i > backstackLimit  ){
-                System.out.println( "removal attmept");
+            if(fragment == null)
+                break;
+            if(   i > backstackLimit  ){
                 fragManager.beginTransaction().remove(  fragment  ).commit();
                 fragmentList.remove(i);
             }
@@ -89,7 +93,6 @@ public class FragmentActivityController {
                 // this does not remove first entry this pops off just added fragment ,
 //                fragManager.popBackStack(entry.getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 fragManager.popBackStack( );
-
             }
         }
     }
