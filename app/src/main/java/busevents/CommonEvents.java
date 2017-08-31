@@ -12,6 +12,19 @@ import io.reactivex.Observer;
 
 public class CommonEvents {
 
+    public static class ListItemAdded{
+        Object addedItem ;
+
+        public ListItemAdded(Object object){this.addedItem = object;}
+
+        public Object getAddedItem() { return addedItem; }
+
+    }
+
+    public static class OnListComplete {
+        public OnListComplete() {
+        }
+    }
 
     public static class UpgradeStatus {
         private boolean isUpgraded;
@@ -82,6 +95,11 @@ public class CommonEvents {
         private Object extraInfo;
 
         public FragmentChangeRequest() { }
+
+        public FragmentChangeRequest(String launchId , Bundle extras ) {
+            this.fragmentToLaunch = launchId ;
+            this.extras = extras ;
+        }
 
         public FragmentChangeRequest setFragmentToLaunchId(String currentFrag) {
             this.fragmentToLaunch = currentFrag;

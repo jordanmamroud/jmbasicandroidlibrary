@@ -15,8 +15,7 @@ public class StringHelper {
     }
 
     public static String capitalize(final String line) {
-        String allLowerCase = line.toLowerCase();
-        return Character.toUpperCase(allLowerCase.charAt(0)) + allLowerCase.substring(1);
+        return  line.length() > 0 ? Character.toUpperCase(line.toLowerCase().charAt(0)) + line.toLowerCase().substring(1) : line ;
     }
 
 

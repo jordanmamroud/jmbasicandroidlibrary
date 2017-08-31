@@ -26,9 +26,32 @@ public class JsonHelper {
         return readJsonFile(context, filelocation, arrayName) ;
     }
 
+    public static String loadJSONFromAsset(Context context , String filelocation )  {
+        return readJsonFile(    context, filelocation   ) ;
+    }
+
+
+    private static String readJsonFile(Context context , String filelocation  ){
+        String json = null;
+        try {
+            InputStream is = context.getAssets().open(filelocation);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+            return json ;
+        } catch (IOException ex) {
+            JHelper.printError("Error reading json in JsonHelper");
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
     private static JSONArray readJsonFile(Context context , String filelocation , String arrayName)  {
         String json = null;
         JSONArray jsonObject = null ;
+
         try {
             InputStream is = context.getAssets().open(filelocation);
             int size = is.available();

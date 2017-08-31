@@ -39,8 +39,8 @@ public class ViewHelper {
         }
     }
 
-    public static void setVisibility(int visibility, View... views){
-        for (View v : views)    v.setVisibility(visibility);
+    public static boolean isValidViewType(int visibility){
+         return  ( visibility == View.VISIBLE || visibility == View.GONE || visibility == View.INVISIBLE) ;
     }
 
     public static void toggleViewVisbility(View view){
@@ -72,6 +72,17 @@ public class ViewHelper {
             v.setVisibility(View.VISIBLE);
             v.setClickable(true);
             v.setEnabled(true);
+        }
+    }
+
+    public static void setVisibility(   int visibility, View... views){
+        if( ! isValidViewType(visibility) )
+            throw new IllegalArgumentException("argument passed to set visibility must be valid");
+
+        boolean isVisible = visibility == View.VISIBLE;
+        for ( View v : views ){
+            setEnabled(isVisible, v );
+            v.setVisibility(  visibility   );
         }
     }
 
