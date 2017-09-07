@@ -30,6 +30,8 @@ public class InfoView extends RelativeLayout{
     private ViewGroup infoContainerLo ;
     private String title ;
     private LinkedHashMap info ;
+    private boolean hideInfo = false;
+    private OnClickListener onInfoViewClick ;
 
     public InfoView(Context context ) {
         super(context);
@@ -55,7 +57,8 @@ public class InfoView extends RelativeLayout{
         itemImgHolder = (ImageView)  findViewById(R.id.itemImgHolder);
     }
 
-    public InfoView setInformation(String title, LinkedHashMap info ){
+    public InfoView setInformation(String title, LinkedHashMap info , boolean hideInfo){
+        this.hideInfo = hideInfo;
         this.info = info ;
         this.title = title;
         setupLayout();
@@ -68,12 +71,31 @@ public class InfoView extends RelativeLayout{
     }
 
     private void setupLayout(){
-        if( title != null   ) infoTitle.setText(StringHelper.capitalize(   title  ) ) ;
-        createCardBack(info , infoContainerLo);
+
+        if( title != null   )
+            infoTitle.setText(StringHelper.capitalize(   title  ) ) ;
+
+        addInfoViews(info , infoContainerLo);
     }
 
-    public void createCardBack(LinkedHashMap<String, String> info, ViewGroup container){
-        createSwitchers(info,   container );
+    public void addInfoViews(LinkedHashMap<String, String> info, ViewGroup container){
+        if( hideInfo )
+            createSwitchers(info,   container );
+        else
+            createInfoViews(    info , container    );
+    }
+
+    public void createInfoViews(LinkedHashMap<String, String> info, ViewGroup parentLo){
+        for (Map.Entry entry : info.entrySet()) {
+            ViewGroup layout = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.component_labeled_text, null, false);
+            TextView label = (TextView) layout.getChildAt(0);
+            TextView factTv = (TextView) layout.getChildAt(1);
+            String labelTxt = StringHelper.capitalize(entry.getKey().toString());
+            String factTxt = StringHelper.capitalize(entry.getValue().toString());
+            label.setText(labelTxt);
+            factTv.setText(factTxt);
+            parentLo.addView(layout);
+        }
     }
 
     public void createSwitchers(LinkedHashMap<String, String> info, ViewGroup parentLo){
@@ -84,12 +106,15 @@ public class InfoView extends RelativeLayout{
             TextView factTv = (TextView) layout.getChildAt(2);
             String labelTxt = StringHelper.capitalize(entry.getKey().toString() );
             String factTxt = StringHelper.capitalize(entry.getValue().toString());
-
             label.setText( labelTxt );
             factTv.setText(factTxt);
             btn.setOnClickListener( v-> revealInfo(btn , factTv));
             parentLo.addView(layout);
         }
+    }
+
+    public void setOnInfoViewClick(OnClickListener onInfoViewClick){
+        infoContainerLo.setOnClickListener(onInfoViewClick);
     }
 
     public void revealInfo(Button button , TextView textView){

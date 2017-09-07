@@ -13,6 +13,7 @@
     <color name="appbarViewsColor">#fff</color>
 
 
+    <color name="labelTextColor">#000</color>
     <color name="textColorPrimary">#0a0909</color>
     <color name="textColorSecondary">#fff</color>
 
@@ -22,4 +23,7 @@
     <color name="pbProgressColor">@color/colorAccent</color>
     <color name="pbEmptyColor">#fff</color>
     <color name="pbTextColor">#000</color>
+
+    <!-- icon switch -->
+    <color name="switchBackground">#494949</color>
 </resources>

@@ -11,10 +11,11 @@ import android.widget.AdapterView;
  * Created by Jordan on 5/4/2017.
  */
 
-public class JOnItemSelected implements RecyclerView.OnItemTouchListener {
+public class JOnItemSelected implements RecyclerView.OnItemTouchListener , AdapterView.OnItemSelectedListener{
 
     private OnItemClickListener mListener;
     private OnItemLongClickListener longClickListener ;
+
 
     GestureDetector mGestureDetector;
 
@@ -41,22 +42,9 @@ public class JOnItemSelected implements RecyclerView.OnItemTouchListener {
         });
     }
 
-    public static AdapterView.OnItemSelectedListener mOnItemSelected(    OnItemClickListener onItemClickListener ) {
-        return new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                onItemClickListener.onItemClick(view, position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-
-            }
-        };
-    };
+    public JOnItemSelected(OnItemClickListener adapterItemListener) {
+        this.mListener = adapterItemListener;
+    }
 
     @Override
     public boolean onInterceptTouchEvent(RecyclerView view, MotionEvent e) {
@@ -76,6 +64,19 @@ public class JOnItemSelected implements RecyclerView.OnItemTouchListener {
 
     @Override
     public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {}
+
+    // these two methods are for overriding adapter view methods.
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        mListener.onItemClick(view ,    position);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+    }
+
+
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);

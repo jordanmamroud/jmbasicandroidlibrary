@@ -88,6 +88,7 @@ public class ViewHelper {
 
     public static void setVisibility( boolean isVisible, View... views){
         int visibility =  isVisible ? View.VISIBLE : View.INVISIBLE ;
+        System.out.println("setting view " + visibility + " vis " + View.VISIBLE  );
         for ( View v : views ){
             setEnabled(isVisible, v );
             v.setVisibility(  visibility   );

@@ -75,7 +75,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter{
 
     @Override
     public void restoreState(Parcelable state, ClassLoader loader) {
-        System.out.println("restoring child fragment state");
+
         try{
             super.restoreState(state, loader);
         }catch (NullPointerException e){

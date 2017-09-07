@@ -16,6 +16,7 @@ import functionalinterfaces.ITitled;
 import utilities.ListHelper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import utilities.StringHelper;
 /**
@@ -49,7 +50,9 @@ public class JSpinnerAdapter extends ArrayAdapter {
     }
 
     public JSpinnerAdapter createRandomOptions (ArrayList itemsToChooseFrom , @Nullable Object presetItem){
-        ArrayList optionsToChoose = ListHelper.getRandomItemsWithOnePreSet(numOfItems , itemsToChooseFrom , presetItem);
+        ArrayList optionsToChoose = ListHelper.getRandomItemsFromList(itemsToChooseFrom , numOfItems  );
+        optionsToChoose.add(presetItem);
+        Collections.shuffle(optionsToChoose);
         addItems(optionsToChoose);
         return this ;
     }
@@ -114,7 +117,6 @@ public class JSpinnerAdapter extends ArrayAdapter {
     public void restoreState(Bundle savedInstance){
         if(savedInstance.getParcelableArrayList("spinnerItems") != null)
             addItems( savedInstance.getParcelableArrayList("spinnerItems"));
-
     }
 
 }

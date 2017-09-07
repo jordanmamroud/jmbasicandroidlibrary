@@ -34,9 +34,7 @@ public abstract class ViewPagerItemFragment extends Fragment implements Observer
         super.onCreate(savedInstanceState);
         if(savedInstanceState != null )
             restore( savedInstanceState);
-
     }
-
 
     public  abstract ViewPagerItemFragment getInstance();
 

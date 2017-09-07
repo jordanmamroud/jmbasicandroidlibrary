@@ -69,9 +69,15 @@
         <item name="android:background">#1e1e1e</item>
     </style>
 
+    <style name="AppTheme.CardView" parent="AppTheme">
+        <item name="cardBackgroundColor">#fff</item>
+        <item name="cardCornerRadius">5dp</item>
+        <item name="cardElevation">5dp</item>
+    </style>
+
     <style name="AppTheme.ScrollView">
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:scrollbarThumbVertical">@drawable/custom_scrollview_thumb</item>
         <item name="android:scrollbarTrackVertical">@drawable/custom_scrollview_track</item>
         <item name="android:scrollbarStyle">insideInset</item>
@@ -153,7 +159,6 @@
         <item name="android:text">Reveal</item>
         <item name="android:layout_marginBottom">0dp</item>
         <item name="android:layout_marginTop">0dp</item>
-
     </style>
 
     <style name="SwitcherHiddenText">
@@ -165,6 +170,38 @@
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:layout_marginLeft">5dp</item>
     </style>
+
+    <!-- component labeledText -->
+    <style name="ComponentLabeledText">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <style name="ComponentLabeledText.Main" parent="AppTheme.TextView.Colored">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">@dimen/mMediumText</item>
+    </style>
+
+    <style name="ComponentLabeledText.Label" parent="AppTheme.TextView">
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:textColor">@color/labelTextColor</item>
+        <item name="android:textSize">@dimen/mMediumText</item>
+    </style>
+
+    <style name="IconSwitch">
+        <item name="isw_background_color">@color/switchBackground</item>
+        <item name="isw_thumb_color_left">@color/colorAccent</item>
+        <item name="isw_thumb_color_right">@color/colorAccent</item>
+        <item name="isw_inactive_tint_icon_left">@color/colorAccentText</item>
+        <item name="isw_inactive_tint_icon_right">@color/colorAccentText</item>
+        <item name="isw_active_tint_icon_left">@color/colorAccentText</item>
+        <item name="isw_active_tint_icon_right">@color/colorAccentText</item>
+    </style>
+
 
 </resources>

@@ -2,8 +2,9 @@ package utilities;
 
 import android.support.annotation.Nullable;
 
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.Scheduler;
@@ -13,12 +14,22 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 
 /**
  * Created by Jordan on 8/16/2017.
  */
 
 public class RxHelper {
+
+    public static Observable setThrottle(PublishSubject subject, int milliseconds  ){
+        return setThrottle(subject   , milliseconds  , AndroidSchedulers.mainThread()  );
+    }
+
+    public static Observable setThrottle(PublishSubject subject, int milliseconds , Scheduler observeThread  ){
+       return subject.throttleFirst(milliseconds , TimeUnit.MILLISECONDS)
+                .observeOn(observeThread).subscribeOn(AndroidSchedulers.mainThread());
+    }
 
     public static Observable createObservable(ObservableOnSubscribe<Object> runonsubscribe){
         return Observable.create(    runonsubscribe      ).subscribeOn( Schedulers.newThread()   ).observeOn(AndroidSchedulers.mainThread());

@@ -6,6 +6,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.example.jordan.jmbasicandroidlibrary.R;
@@ -22,6 +23,7 @@ public class LayoutFlipController {
     private AnimatorSet mSetLeftIn;
     private View frontLayout ;
     private View backLayout ;
+
     private boolean mIsBackVisible ;
     private boolean mIsRunning ;
 
@@ -67,10 +69,15 @@ public class LayoutFlipController {
         };
     }
 
-    public void flipIfNotFlipping(){     if( !   mIsRunning ) flipLayouts();        }
+    public void flipIfNotFlipping(@Nullable Runnable onFlipStartlistener){
+        if( !   mIsRunning )
+            flipLayouts(onFlipStartlistener);
+    }
 
-    private void flipLayouts(){
+    private void flipLayouts(Runnable onFlipStartlistener){
         mIsRunning = false ;
+        if(onFlipStartlistener != null )
+            onFlipStartlistener.run();
         // passing in oppositite of what it is because thats what it will be .
         if (!mIsBackVisible) {
             flipToBack();
@@ -124,8 +131,6 @@ public class LayoutFlipController {
     public boolean isFlipped() {    return mIsBackVisible;  }
 
     public void setIsBackVisible(boolean visible){ this.mIsBackVisible = visible ;}
-
-
 
     public void setAnimationListener(AnimatorListenerAdapter animationListener){ mSetLeftIn.addListener( animationListener   ); }
 

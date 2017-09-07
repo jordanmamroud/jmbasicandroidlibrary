@@ -84,17 +84,15 @@ public class GridViewDelegate implements IAdapterDelegates {
 
     @Override
     public void update(Object obj) {
-        // show all images if they are locked
-        if ( obj instanceof  Boolean )   allUnlocked =   true ;
-    }
+        if(obj instanceof Boolean )
+            allUnlocked = (Boolean) obj ;
+     }
 
     @Override
     public RecyclerView.ViewHolder createViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_locked_image, parent, false);
         return new GridViewHolder(v);
     }
-
-    public void setAllUnlocked(boolean allUnlocked) {   this.allUnlocked = allUnlocked; }
 
     public class GridViewHolder extends RecyclerView.ViewHolder{
         CardView layout ;

@@ -7,4 +7,5 @@ package view.Animations.layoutflip;
 public interface IFlippable {
         void flip();
         boolean isFlipped();
+
 }
